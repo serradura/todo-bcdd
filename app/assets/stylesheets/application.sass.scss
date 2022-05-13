@@ -1,2 +1,18 @@
 // Entry point for your Sass build
 @import url("./simpledotcss/simple.css");
+
+body {
+  header {
+    grid-column: 2;
+    padding: 0 0.5rem 1rem 0.5rem;
+  }
+
+  header h1 {
+    margin: 1rem auto;
+    margin-bottom: 0;
+  }
+
+  main {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,19 @@
+<%= render('users/shared/header') %>
+
+<main>
+  <h2>Forgot your password?</h2>
+
+  <%= form_for(:user, as: :user, url: '/', html: { method: :post }) do |f| %>
+    <p>
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: 'email' %>
+    </p>
+
+    <p>
+      <%= f.submit 'Send me reset password instructions' %>
+    </p>
+  <% end %>
+
+  <%= render('users/shared/links/sign_in') %><br />
+  <%= render('users/shared/links/sign_up') %>
+</main>

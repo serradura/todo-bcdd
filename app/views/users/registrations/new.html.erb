@@ -1,0 +1,31 @@
+<%= render('users/shared/header') %>
+
+<main>
+  <h2>Sign up</h2>
+
+  <p>Please fill in this form to create an account!</p>
+
+  <%= form_for(:user, as: :user, url: '/') do |f| %>
+    <p>
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: 'email' %>
+    </p>
+
+    <p>
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: 'new-password' %>
+    </p>
+
+    <p>
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation, autocomplete: 'new-password' %>
+    </p>
+
+    <p>
+      <%= f.submit 'Sign up' %>
+    </p>
+  <% end %>
+
+  <%= render('users/shared/links/sign_in') %><br />
+  <%= render('users/shared/links/reset_password') %>
+</main>

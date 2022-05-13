@@ -1,0 +1,24 @@
+<%= render('users/shared/header') %>
+
+<main>
+  <h2>Please sign in</h2>
+
+  <%= form_for(:user, as: :user, url: '/') do |f| %>
+    <p>
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, autocomplete: 'email' %>
+    </p>
+
+    <p>
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: 'current-password' %>
+    <p>
+
+    <p>
+      <%= f.submit 'Log in' %>
+    <p>
+  <% end %>
+
+  <%= render('users/shared/links/sign_up') %><br />
+  <%= render('users/shared/links/reset_password') %>
+</main>
