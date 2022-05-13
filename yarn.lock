@@ -237,6 +237,11 @@ sass@^1.51.0:
     immutable "^4.0.0"
     source-map-js ">=0.6.2 <2.0.0"
 
+simpledotcss@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/simpledotcss/-/simpledotcss-2.1.0.tgz#e116caaff8431c7f143f76303b57797ea4b41683"
+  integrity sha512-REL4HZBg85Tywxw5AeTAF6/7iJYso6cW8kuu+bRg1gOSoE+TbwzOb7kWUhgVc+36iVI2fNlyX4BrUvUlIDjhZA==
+
 "source-map-js@>=0.6.2 <2.0.0":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
