@@ -7,5 +7,16 @@ Rails.application.routes.draw do
     get '/sign_in', to: 'sessions#new'
   end
 
+  namespace :todos do
+    get '/new', to: 'item#new'
+    get '/edit', to: 'item#edit'
+
+    scope module: :list do
+      get '/completed', to: 'completed#index'
+      get '/uncompleted', to: 'uncompleted#index'
+    end
+  end
+
+  # Defines the root path route ("/")
   root 'users/sessions#new'
 end

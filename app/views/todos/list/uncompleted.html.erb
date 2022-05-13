@@ -1,0 +1,7 @@
+<%= render('todos/shared/header', current: 'uncompleted') %>
+
+<main>
+  <h2>Uncompleted (1)</h2>
+
+  <%= render('todos/list/items', action_to_toggle_state: 'complete') %>
+</main>

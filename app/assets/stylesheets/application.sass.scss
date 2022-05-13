@@ -7,6 +7,11 @@ body {
     padding: 0 0.5rem 1rem 0.5rem;
   }
 
+  header nav a.current {
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+  }
+
   header h1 {
     margin: 1rem auto;
     margin-bottom: 0;
@@ -14,5 +19,11 @@ body {
 
   main {
     padding-top: 0;
+  }
+
+  &.todos-app {
+    table thead tr th:first-child {
+      width: 100%;
+    }
   }
 }
