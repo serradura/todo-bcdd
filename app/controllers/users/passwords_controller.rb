@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  class PasswordsController < ApplicationController
-    layout 'users/guest'
-
+  class PasswordsController < BaseController
     def new
       render('users/passwords/new')
     end

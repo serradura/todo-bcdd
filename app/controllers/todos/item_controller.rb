@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Todos
-  class ItemController < ApplicationController
-    layout 'todos/application'
-
+  class ItemController < BaseController
     def new
       render('todos/item/new')
     end

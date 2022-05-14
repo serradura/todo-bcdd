@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-  class SessionsController < ApplicationController
-    layout 'users/guest'
-
+  class SessionsController < BaseController
     def new
       render('users/sessions/new')
     end

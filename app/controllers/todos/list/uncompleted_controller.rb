@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Todos::List
-  class UncompletedController < ApplicationController
-    layout 'todos/application'
-
+  class UncompletedController < ::Todos::BaseController
     def index
       render('todos/list/uncompleted')
     end
