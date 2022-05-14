@@ -2,6 +2,7 @@
   "name": "app",
   "private": "true",
   "dependencies": {
+    "@rails/ujs": "^6.0.5",
     "esbuild": "^0.14.38",
     "sass": "^1.51.0",
     "simpledotcss": "^2.1.0"
