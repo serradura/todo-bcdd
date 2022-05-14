@@ -10,7 +10,7 @@ module Users
       warden.authenticate(:password, scope: :user)
 
       if warden.authenticated?(:user)
-        redirect_to(todos_uncompleted_url, notice: 'Logged in!')
+        redirect_to(users_root_url, notice: 'Logged in!')
       else
         render('users/sessions/new', alert: warden.message)
       end
