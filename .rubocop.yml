@@ -79,6 +79,9 @@ Layout/ExtraSpacing:
 Layout/HashAlignment:
   Enabled: false
 
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
 Layout/LineLength:
   Exclude:
     - bin/bundle

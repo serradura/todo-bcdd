@@ -5,7 +5,7 @@
     <%= link_to('New', todos_new_path, class: current_page['new'] ) %>
     <%= link_to('Uncompleted', todos_uncompleted_path, class: current_page['uncompleted']) %>
     <%= link_to('Completed', todos_completed_path, class: current_page['completed']) %>
-    <a href="/">Log out</a>
+    <%= link_to('Log out', users_logout_path, method: :delete) %>
   </nav>
 
   <h1>To-do B/CDD</h1>

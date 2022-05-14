@@ -3,7 +3,7 @@
 <main>
   <h2>Please sign in</h2>
 
-  <%= form_for(:user, as: :user, url: '/') do |f| %>
+  <%= form_for(:user, as: :user, method: :post, url: users_session_path) do |f| %>
     <p>
       <%= f.label :email %><br />
       <%= f.email_field :email, autofocus: true, autocomplete: 'email' %>
