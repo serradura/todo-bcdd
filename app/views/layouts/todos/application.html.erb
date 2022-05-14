@@ -11,6 +11,10 @@
   </head>
 
   <body class="todos-app">
+    <% flash.each do |_type, message| %>
+      <p class="notice"><strong><%= message %></strong></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

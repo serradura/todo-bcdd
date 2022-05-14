@@ -27,3 +27,11 @@ body {
     }
   }
 }
+
+.notice {
+  background: var(--accent-bg);
+  border: 2px solid var(--border);
+  border-radius: 5px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}

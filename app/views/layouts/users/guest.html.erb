@@ -11,6 +11,10 @@
   </head>
 
   <body class="users-guest">
+    <% flash.each do |type, message| %>
+      <p class="notice"><strong><%= message %></strong></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
