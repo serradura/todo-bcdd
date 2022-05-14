@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -9,7 +11,7 @@ Rails.application.routes.draw do
 
   namespace :todos do
     get '/new', to: 'item#new'
-    get '/edit', to: 'item#edit'
+    get '/edit/:id', to: 'item#edit', as: :edit
 
     scope module: :list do
       get '/completed', to: 'completed#index'
