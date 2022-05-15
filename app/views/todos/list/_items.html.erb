@@ -8,9 +8,9 @@
   <tbody>
     <tr>
       <td>Buy Milk</td>
-      <td><%= render('todos/list/actions/edit') %></td>
-      <td><%= render('todos/list/actions/delete') %></td>
-      <td><%= render("todos/list/actions/#{action_to_toggle_state}") %></td>
+      <td><%= render(partial: 'todos/list/actions/edit') %></td>
+      <td><%= render(partial: 'todos/list/actions/delete') %></td>
+      <td><%= render(partial: "todos/list/actions/#{action_to_toggle_state}") %></td>
     </tr>
   </tbody>
 </table>

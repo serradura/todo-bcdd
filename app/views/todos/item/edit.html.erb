@@ -1,7 +1,7 @@
-<%= render('todos/shared/header', current: 'edit') %>
+<%= render(partial: 'todos/shared/header', locals: {current: 'edit'}) %>
 
 <main>
   <h2>Edit item #1</h2>
 
-  <%= render('form') %>
+  <%= render(partial: 'form', locals: {action_name: 'Update'}) %>
 </main>

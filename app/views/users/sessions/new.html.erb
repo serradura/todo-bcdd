@@ -1,4 +1,4 @@
-<%= render('users/shared/header') %>
+<%= render(partial: 'users/shared/header') %>
 
 <main>
   <h2>Please sign in</h2>
@@ -6,12 +6,12 @@
   <%= form_for(:user, as: :user, method: :post, url: users_session_path) do |f| %>
     <p>
       <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: 'email' %>
+      <%= f.email_field :email, autofocus: true, autocomplete: 'email', required: true, value: user_email %>
     </p>
 
     <p>
       <%= f.label :password %><br />
-      <%= f.password_field :password, autocomplete: 'current-password' %>
+      <%= f.password_field :password, autocomplete: 'current-password', required: true %>
     <p>
 
     <p>
@@ -19,6 +19,6 @@
     <p>
   <% end %>
 
-  <%= render('users/shared/links/sign_up') %><br />
-  <%= render('users/shared/links/reset_password') %>
+  <%= render(partial: 'users/shared/links/sign_up') %><br />
+  <%= render(partial: 'users/shared/links/reset_password') %>
 </main>

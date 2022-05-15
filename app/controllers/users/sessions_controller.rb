@@ -3,7 +3,7 @@
 module Users
   class SessionsController < BaseController
     def new
-      render('users/sessions/new')
+      render('users/sessions/new', locals: {user_email: nil})
     end
 
     def create
@@ -12,7 +12,11 @@ module Users
       if warden.authenticated?(:user)
         redirect_to(users_root_url, notice: 'Logged in!')
       else
-        render('users/sessions/new', alert: warden.message)
+        flash.now.alert = warden.message
+
+        user_email = params.require(:user).fetch(:email)
+
+        render('users/sessions/new', locals: {user_email:})
       end
     end
 

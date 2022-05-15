@@ -1,24 +1,24 @@
-<%= render('users/shared/header') %>
+<%= render(partial: 'users/shared/header') %>
 
 <main>
   <h2>Sign up</h2>
 
   <p>Please fill in this form to create an account!</p>
 
-  <%= form_for(:user, as: :user, url: '/') do |f| %>
+  <%= form_for(:user, as: :user, url: users_registration_path) do |f| %>
     <p>
       <%= f.label :email %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: 'email' %>
+      <%= f.email_field :email, autofocus: true, autocomplete: 'email', value: user_email, required: true %>
     </p>
 
     <p>
       <%= f.label :password %><br />
-      <%= f.password_field :password, autocomplete: 'new-password' %>
+      <%= f.password_field :password, autocomplete: 'new-password', required: true %>
     </p>
 
     <p>
       <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: 'new-password' %>
+      <%= f.password_field :password_confirmation, autocomplete: 'new-password', required: true %>
     </p>
 
     <p>
@@ -26,6 +26,6 @@
     </p>
   <% end %>
 
-  <%= render('users/shared/links/sign_in') %><br />
-  <%= render('users/shared/links/reset_password') %>
+  <%= render(partial: 'users/shared/links/sign_in') %><br />
+  <%= render(partial: 'users/shared/links/reset_password') %>
 </main>
