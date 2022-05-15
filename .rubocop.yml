@@ -58,6 +58,9 @@ Style/FrozenStringLiteralComment:
     - Gemfile
     - Rakefile
 
+Style/HashSyntax:
+  Enabled: false
+
 Style/Lambda:
   Enabled: false
 
@@ -81,8 +84,12 @@ Layout/ArrayAlignment:
 Layout/ExtraSpacing:
   Enabled: false
 
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
 Layout/HashAlignment:
-  Enabled: false
+  EnforcedColonStyle: key
+  EnforcedHashRocketStyle: table
 
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
