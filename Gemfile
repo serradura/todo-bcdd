@@ -42,6 +42,9 @@ group :development, :test do
   gem 'rubocop', '~> 1.29', '>= 1.29.1'
   gem 'rubocop-rails', '~> 2.14', '>= 2.14.2'
   gem 'rubocop-rake', '~> 0.6.0'
+  gem 'rubocop-rspec', '~> 2.10'
+
+  gem 'rspec-rails', '~> 5.1', '>= 5.1.2'
 end
 
 group :development do
@@ -53,4 +56,7 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+group :test do
+  gem 'shoulda-matchers', '~> 5.1'
 end

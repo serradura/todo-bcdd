@@ -14,6 +14,7 @@ inherit_from: .rubocop_todo.yml
 require:
   - rubocop-rails
   - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   NewCops: enable
@@ -28,6 +29,10 @@ Gemspec/RequiredRubyVersion:
 
 Style/Alias:
   Enabled: false
+
+Style/BlockComments:
+  Exclude:
+    - spec/spec_helper.rb
 
 Style/CaseEquality:
   Enabled: false
@@ -126,3 +131,8 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Exclude:
     - bin/bundle
+
+# == Rspec ==
+
+RSpec/MultipleExpectations:
+  Enabled: false
