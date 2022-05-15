@@ -1,0 +1,29 @@
+<%= render(partial: 'users/shared/form_errors', locals: {form_errors: form_errors}) %>
+
+<%= render(partial: 'users/shared/header') %>
+
+<main>
+  <h2>Change your password</h2>
+
+  <%= form_for(:user, {
+    as: :user,
+    url: users_reset_password_path(uuid: reset_password_token),
+    html: { method: :put }
+  }) do |f| %>
+    <p>
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: 'new-password', required: true %>
+    </p>
+
+    <p>
+      <%= f.label :password_confirmation, 'Confirm new password' %><br />
+      <%= f.password_field :password_confirmation, autocomplete: 'new-password', required: true %>
+    </p>
+
+    <p>
+      <%= f.submit 'Change my password' %>
+    </p>
+  <% end %>
+
+  <%= render(partial: 'users/shared/links/sign_in') %><br />
+</main>

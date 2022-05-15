@@ -15,6 +15,9 @@ Rails.application.routes.draw do
       post '/sign_up', to: 'registrations#create'
 
       get  '/reset_password', to: 'passwords#new', as: 'new_reset_password'
+      post '/reset_password', to: 'passwords#create', as: nil
+      get  '/reset_password/:uuid', to: 'passwords#edit', as: 'reset_password'
+      put  '/reset_password/:uuid', to: 'passwords#update', as: nil
     end
 
     root to: redirect('/users/sign_in', status: 302)

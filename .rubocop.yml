@@ -126,6 +126,7 @@ Naming/RescuedExceptionsVariableName:
 Metrics/BlockLength:
   Exclude:
     - config/routes.rb
+    - spec/**/*.rb
 
 Metrics/CyclomaticComplexity:
   Exclude:
@@ -142,4 +143,8 @@ Metrics/PerceivedComplexity:
 # == Rspec ==
 
 RSpec/MultipleExpectations:
+  Enabled: false
+
+# == Rails ==
+Rails/SkipsModelValidations:
   Enabled: false
