@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get '/reset_password', to: 'passwords#new'
 
       post '/sign_in', to: 'sessions#create', as: 'session'
+      post '/sign_up', to: 'registrations#create', as: 'registration'
     end
 
     root to: redirect('/users/sign_in')
@@ -20,6 +21,8 @@ Rails.application.routes.draw do
 
   constraints user_access do
     namespace :users do
+      get '/sign_in', to: redirect('/todos/uncompleted')
+
       delete '/logout', to: 'sessions#destroy'
     end
 

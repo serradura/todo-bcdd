@@ -10,24 +10,30 @@ end
 
 ::Warden::Strategies.add(:password) do
   def valid?
-    scoped_params = params[scope.to_s]
+    email, password = scoped_params&.values_at('email', 'password')
 
-    scoped_params['email'] && scoped_params['password']
+    email.present? && password.present? && ::URI::MailTo::EMAIL_REGEXP.match?(email)
   end
 
   def authenticate!
-    user = {id: 1}
+    email, password = scoped_params.fetch_values('email', 'password')
 
-    return success!(user) if user
+    user = ::User.find_by(email:)
 
-    fail!('Invalid email or password')
+    return success!(user) if user && ::BCrypt::Password.new(user.encrypted_password) == password
+
+    fail!('Incorrect email or password.')
   end
+
+  private
+
+    def scoped_params
+      @scoped_params ||= params[scope.to_s]
+    end
 end
 
-::Warden::Manager.serialize_into_session(:user) do |user|
-  user[:id]
-end
+::Warden::Manager.serialize_into_session(:user, &:id)
 
 ::Warden::Manager.serialize_from_session(:user) do |id|
-  {id:}
+  ::User.find_by(id:)
 end
