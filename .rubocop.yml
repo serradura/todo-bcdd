@@ -111,6 +111,10 @@ Naming/RescuedExceptionsVariableName:
 
 # == Metrics ==
 
+Metrics/BlockLength:
+  Exclude:
+    - config/routes.rb
+
 Metrics/CyclomaticComplexity:
   Exclude:
     - bin/bundle
