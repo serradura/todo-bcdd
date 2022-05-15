@@ -10,4 +10,16 @@ class UserMailer < ApplicationMailer
       end
     end
   end
+
+  def reset_password
+    email = params[:email]
+
+    mail(to: email, subject: 'To-do B/CDD - Reset password instructions') do |format|
+      format.html do
+        url = users_reset_password_url(uuid: params[:reset_password_token])
+
+        render('users/mailer/reset_password', locals: {email:, url:})
+      end
+    end
+  end
 end

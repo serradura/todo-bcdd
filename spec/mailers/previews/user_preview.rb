@@ -2,9 +2,15 @@
 
 # Preview all emails at http://localhost:3000/rails/mailers/user
 class UserPreview < ActionMailer::Preview
-  def welcome
-    user = ::User.new(email: 'email@example.com')
+  EMAIL = 'email@example.com'
 
-    ::UserMailer.with(user: user).welcome
+  def welcome
+    ::UserMailer.with(email: EMAIL).welcome
+  end
+
+  def reset_password
+    reset_password_token = ::SecureRandom.uuid
+
+    ::UserMailer.with(reset_password_token:, email: EMAIL).reset_password
   end
 end
