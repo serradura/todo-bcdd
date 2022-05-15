@@ -8,12 +8,13 @@ Rails.application.routes.draw do
 
   constraints guest_access do
     namespace :users do
-      get '/sign_in', to: 'sessions#new'
-      get '/sign_up', to: 'registrations#new'
-      get '/reset_password', to: 'passwords#new'
+      get  '/sign_in', to: 'sessions#new'
+      post '/sign_in', to: 'sessions#create'
 
-      post '/sign_in', to: 'sessions#create', as: 'session'
-      post '/sign_up', to: 'registrations#create', as: 'registration'
+      get  '/sign_up', to: 'registrations#new'
+      post '/sign_up', to: 'registrations#create'
+
+      get  '/reset_password', to: 'passwords#new', as: 'new_reset_password'
     end
 
     root to: redirect('/users/sign_in', status: 302)

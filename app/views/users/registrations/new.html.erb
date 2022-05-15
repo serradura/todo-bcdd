@@ -7,7 +7,7 @@
 
   <p>Please fill in this form to create an account!</p>
 
-  <%= form_for(:user, as: :user, url: users_registration_path) do |f| %>
+  <%= form_for(:user, as: :user, url: users_sign_up_path) do |f| %>
     <p>
       <%= f.label :email %><br />
       <%= f.email_field :email, autofocus: true, autocomplete: 'email', value: user_email, required: true %>
