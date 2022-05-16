@@ -101,6 +101,7 @@ GEM
       reline (>= 0.3.0)
     jsbundling-rails (1.0.2)
       railties (>= 6.0.0)
+    kind (5.10.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     letter_opener (1.8.1)
@@ -230,6 +231,11 @@ GEM
     timeout (0.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
+    u-attributes (2.8.0)
+      kind (>= 4.0, < 6.0)
+    u-case (4.5.1)
+      kind (>= 5.6, < 6.0)
+      u-attributes (>= 2.7, < 3.0)
     unicode-display_width (2.1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -267,6 +273,7 @@ DEPENDENCIES
   shoulda-matchers (~> 5.1)
   simplecov (~> 0.21.2)
   tzinfo-data
+  u-case (~> 4.5, >= 4.5.1)
   warden (~> 1.2, >= 1.2.9)
   web-console
 
