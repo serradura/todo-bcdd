@@ -34,6 +34,10 @@ Style/BlockComments:
   Exclude:
     - spec/spec_helper.rb
 
+Style/BlockDelimiters:
+  Exclude:
+    - spec/**/*.rb
+
 Style/CaseEquality:
   Enabled: false
 
@@ -110,6 +114,10 @@ Layout/SpaceInsideHashLiteralBraces:
 
 # == Lint ==
 
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - spec/**/*.rb
+
 Lint/ConstantDefinitionInBlock:
   Enabled: false
 
@@ -142,8 +150,21 @@ Metrics/PerceivedComplexity:
 
 # == Rspec ==
 
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - and
+    - with
+    - without
+
 RSpec/MultipleExpectations:
   Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
 
 # == Rails ==
 Rails/SkipsModelValidations:
