@@ -7,38 +7,24 @@ module Users
     end
 
     def create
-      user_params = params.require(:user).permit(:email, :password, :password_confirmation)
+      user_params = params.require(:user)
 
-      email = String(user_params[:email]).strip.downcase
-      password = String(user_params[:password]).strip
-      password_confirmation = String(user_params[:password_confirmation]).strip
+      input = {
+        email: user_params[:email],
+        password: user_params[:password],
+        password_confirmation: user_params[:password_confirmation]
+      }
 
-      errors = {}
-      errors[:email] = 'is invalid' if email.blank? || !::URI::MailTo::EMAIL_REGEXP.match?(email)
-      errors[:password] = "can't be blank" if password.blank?
-      errors[:password] ||= 'is too short (minimum: 6)' if password.size < 6
-      errors[:password_confirmation] = "can't be blank" if password_confirmation.blank?
-      errors[:password_confirmation] ||= "doesn't match password" if password != password_confirmation
+      ::User::CreateAndSendWelcomeEmail
+        .call(input)
+        .on_failure(:validation_errors) { |result| render_sign_up_with_form_errors(result) }
+        .on_success do |result|
+          warden.set_user(result[:user], scope: :user)
 
-      return render_sign_up(email:, errors:) if errors.present?
+          notice = 'Congratulations, your account has been successfully created.'
 
-      encrypted_password = ::BCrypt::Password.create(password)
-
-      user = ::User.new(email:, encrypted_password:)
-
-      if user.save
-        ::UserMailer.with(email:).welcome.deliver_later
-
-        warden.set_user(user, scope: :user)
-
-        notice = 'Congratulations, your account has been successfully created.'
-
-        redirect_to(users_root_url, notice:)
-      else
-        errors = user.errors.messages.transform_values { |messages| messages.join(', ') }
-
-        render_sign_up(email:, errors:)
-      end
+          redirect_to(users_root_url, notice:)
+        end
     end
 
     private
@@ -48,6 +34,10 @@ module Users
           user_email: email,
           form_errors: errors
         })
+      end
+
+      def render_sign_up_with_form_errors(result)
+        render_sign_up(email: result[:email], errors: result[:errors])
       end
   end
 end

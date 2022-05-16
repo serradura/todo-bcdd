@@ -10,19 +10,18 @@ end
 
 ::Warden::Strategies.add(:password) do
   def valid?
-    email, password = scoped_params&.values_at('email', 'password')
+    email_and_password = scoped_params.slice('email', 'password')
 
-    email.present? && password.present? && ::URI::MailTo::EMAIL_REGEXP.match?(email)
+    ::User::ValidateEmailAndPassword.call(email_and_password).success?
   end
 
   def authenticate!
-    email, password = scoped_params.fetch_values('email', 'password')
+    email_and_password = scoped_params.slice('email', 'password')
 
-    user = ::User.find_by(email:)
-
-    return success!(user) if user && ::BCrypt::Password.new(user.encrypted_password) == password
-
-    fail!('Incorrect email or password.')
+    ::User::Authenticate.call(email_and_password) do |on|
+      on.failure { fail!('Incorrect email or password.') }
+      on.success { |result| success!(result[:user]) }
+    end
   end
 
   private
@@ -35,5 +34,8 @@ end
 ::Warden::Manager.serialize_into_session(:user, &:id)
 
 ::Warden::Manager.serialize_from_session(:user) do |id|
-  ::User.find_by(id:)
+  ::User::Find.call(id:) do |on|
+    on.failure { raise NotImplementedError }
+    on.success { |result| result[:user] }
+  end
 end

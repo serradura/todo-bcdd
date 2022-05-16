@@ -9,13 +9,7 @@ module Users
     def create
       email = params.require(:user).fetch(:email)
 
-      if email.present? && ::URI::MailTo::EMAIL_REGEXP.match?(email)
-        reset_password_token = ::SecureRandom.uuid
-
-        updated = ::User.where(email:).update_all(reset_password_token:).nonzero?
-
-        ::UserMailer.with(email:, reset_password_token:).reset_password.deliver_later if updated
-      end
+      ::User::SendInstructionsToResetPassword.call(email:)
 
       notice = 'You will receive an email with instructions for how to confirm your email address in a few minutes.'
 
@@ -25,48 +19,49 @@ module Users
     def edit
       reset_password_token = params[:uuid]
 
-      return render_edit(reset_password_token:, errors: nil) if ::User.exists?(reset_password_token:)
+      ::User::ValidateResetPasswordToken
+        .call(token: reset_password_token)
+        .on_success { render_edit(reset_password_token:, errors: nil) }
+        .on_failure do
+          notice =
+            "You can't access this page without coming from a password reset email. " \
+            'If you do come from a password reset email, please make sure you used the full URL provided.'
 
-      notice =
-        "You can't access this page without coming from a password reset email. " \
-        'If you do come from a password reset email, please make sure you used the full URL provided.'
-
-      redirect_to(root_path, notice:)
+          redirect_to(root_path, notice:)
+        end
     end
 
     def update
+      user_params = params.require(:user)
+
       reset_password_token = params[:uuid]
 
-      user = ::User.find_by(reset_password_token:)
+      input = {
+        token: reset_password_token,
+        password: user_params[:password],
+        password_confirmation: user_params[:password_confirmation]
+      }
 
-      return redirect_to(root_path, notice: 'You cannot perform this action.') unless user
+      ::User::ResetPassword
+        .call(input)
+        .on_failure(:invalid_token) { forbid_access_and_redirect }
+        .on_failure(:user_not_found) { forbid_access_and_redirect }
+        .on_failure(:invalid_password) { |result| render_edit(reset_password_token:, errors: result[:errors]) }
+        .on_success do |result|
+          warden.set_user(result[:user], scope: :user)
 
-      user_params = params.require(:user).permit(:password, :password_confirmation)
-
-      password = String(user_params[:password]).strip
-      password_confirmation = String(user_params[:password_confirmation]).strip
-
-      errors = {}
-      errors[:password] = "can't be blank" if password.blank?
-      errors[:password] ||= 'is too short (minimum: 6)' if password.size < 6
-      errors[:password_confirmation] = "can't be blank" if password_confirmation.blank?
-      errors[:password_confirmation] ||= "doesn't match password" if password != password_confirmation
-
-      return render_edit(reset_password_token:, errors: errors) if errors.present?
-
-      encrypted_password = ::BCrypt::Password.create(password)
-
-      user.update!(encrypted_password:, reset_password_token: nil)
-
-      warden.set_user(user, scope: :user)
-
-      redirect_to(users_root_path, notice: 'Your password has been changed successfully. You are now signed in.')
+          redirect_to(users_root_path, notice: 'Your password has been changed successfully. You are now signed in.')
+        end
     end
 
     private
 
       def render_edit(reset_password_token:, errors:)
         render('users/passwords/edit', locals: {reset_password_token:, form_errors: errors})
+      end
+
+      def forbid_access_and_redirect
+        redirect_to(root_path, notice: 'You cannot perform this action.')
       end
   end
 end
