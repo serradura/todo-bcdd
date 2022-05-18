@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  describe 'associations' do
+    describe 'has_many' do
+      it { is_expected.to have_many(:todos) }
+    end
+  end
+
   describe 'validations' do
     describe 'email' do
       subject { described_class.new(email: '', encrypted_password: '') }
