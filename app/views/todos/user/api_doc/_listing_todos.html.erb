@@ -1,0 +1,27 @@
+
+<h4>Listing to-dos</h4>
+
+<table>
+  <tbody>
+    <tr>
+      <th style="width: 100px;">Method:</th>
+      <td style="width: 100%">GET</td>
+    </tr>
+    <tr>
+      <th>Endpoint:</th>
+      <td style="background-color: #fff;">
+        <code><%= api_base_url %>/todos<mark>?status=completed</mark></code><br />
+      </td>
+    </tr>
+    <tr>
+      <th>Params:</th>
+      <td style="background-color: #fff;">
+        <strong>status:</strong> completed, uncompleted
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<pre>curl -i -X GET "<%= api_base_url %>/todos?status=uncompleted" \
+  -H "Content-Type: application/json" \
+  -H "X-Access-Token: <%= user_api_token %>"</pre>

@@ -1,0 +1,92 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe User::GenerateNewAPIToken, type: :use_case do
+  describe '.call' do
+    describe 'failures' do
+      context 'when the token is blank' do
+        let(:token) { [nil, '', ' '].sample }
+
+        it 'returns a failure' do
+          result = described_class.call(token:)
+
+          expect(result).to be_a_failure
+          expect(result.type).to be(:invalid_attributes)
+          expect(result.data.keys).to contain_exactly(:errors)
+        end
+
+        it 'exposes the validation errors' do
+          result = described_class.call(token:)
+
+          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:token)
+        end
+      end
+
+      context 'when the token is invalid' do
+        let(:token) { ['foo', 'foo.com'].sample }
+
+        it 'returns a failure' do
+          result = described_class.call(token:)
+
+          expect(result).to be_a_failure
+          expect(result.type).to be(:invalid_attributes)
+          expect(result.data.keys).to contain_exactly(:errors)
+        end
+
+        it 'exposes the validation errors' do
+          result = described_class.call(token:)
+
+          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:token)
+        end
+      end
+
+      context 'when the user is not found' do
+        let(:token) { Faker::Alphanumeric.alphanumeric(number: 36) }
+
+        it 'returns a failure result' do
+          result = described_class.call(token:)
+
+          expect(result).to be_a_failure
+          expect(result.type).to be(:user_not_found)
+          expect(result.data.keys).to contain_exactly(:user_not_found)
+        end
+
+        it 'exposes user_not_found' do
+          result = described_class.call(token:)
+
+          expect(result[:user_not_found]).to be(true)
+        end
+      end
+    end
+
+    describe 'success' do
+      context 'when the user is found' do
+        let!(:user) { create(:user) }
+        let!(:token) { user.api_token }
+
+        it 'returns a succesful result' do
+          result = described_class.call(token:)
+
+          expect(result).to be_a_success
+          expect(result.type).to be(:api_token_updated)
+          expect(result.data.keys).to contain_exactly(:api_token_updated)
+        end
+
+        it 'exposes instructions_delivered' do
+          result = described_class.call(token:)
+
+          expect(result[:api_token_updated]).to be(true)
+        end
+
+        it 'changes the user api_token' do
+          expect {
+            described_class.call(token:)
+          }.to change { user.reload.api_token }
+
+          expect(user.api_token.size).to be == 36
+        end
+      end
+    end
+  end
+end

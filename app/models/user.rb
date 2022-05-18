@@ -12,4 +12,9 @@ class User < ApplicationRecord
   validates :encrypted_password, {
     :presence => true
   }
+
+  validates :api_token, {
+    :presence => true,
+    :length   => {is: 36}
+  }
 end

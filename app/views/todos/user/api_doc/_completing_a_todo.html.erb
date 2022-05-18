@@ -1,0 +1,18 @@
+<h4>Completing a to-do</h4>
+
+<table>
+  <tbody>
+    <tr>
+      <th style="width: 100px;">Method:</th>
+      <td style="width: 100%">PUT</td>
+    </tr>
+    <tr>
+      <th>Endpoint:</th>
+      <td style="background-color: #fff;"><code><%= api_base_url %>/todos/<mark>:id</mark>/complete</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre>curl -i -X PUT "<%= api_base_url %>/todos/1/complete" \
+  -H "Content-Type: application/json" \
+  -H "X-Access-Token: <%= user_api_token %>"</pre>

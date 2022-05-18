@@ -1,0 +1,19 @@
+<h4>Updating the to-do description</h4>
+
+<table>
+  <tbody>
+    <tr>
+      <th style="width: 100px;">Method:</th>
+      <td style="width: 100%">PUT</td>
+    </tr>
+    <tr>
+      <th>Endpoint:</th>
+      <td style="background-color: #fff;"><code><%= api_base_url %>/todos/<mark>:id</mark></td>
+    </tr>
+  </tbody>
+</table>
+
+<pre>curl -i -X PUT "<%= api_base_url %>/todos/1" \
+  -H "Content-Type: application/json" \
+  -H "X-Access-Token: <%= user_api_token %>" \
+  -d '{"todo":{"description": "Buy milk"}}'</pre>

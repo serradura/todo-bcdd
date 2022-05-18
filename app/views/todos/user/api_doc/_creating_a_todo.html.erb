@@ -1,0 +1,19 @@
+<h4>Creating a to-do</h4>
+
+<table>
+  <tbody>
+    <tr>
+      <th style="width: 100px;">Method:</th>
+      <td style="width: 100%">POST</td>
+    </tr>
+    <tr>
+      <th>Endpoint:</th>
+      <td style="background-color: #fff;"><code><%= api_base_url %>/todos</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre>curl -i -X POST "<%= api_base_url %>/todos" \
+  -H "Content-Type: application/json" \
+  -H "X-Access-Token: <%= user_api_token %>" \
+  -d '{"todo":{"description": "Buy coffee"}}'</pre>

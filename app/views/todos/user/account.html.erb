@@ -1,0 +1,35 @@
+<%= render(partial: 'todos/shared/header', locals: {current: 'my_account'}) %>
+
+<main>
+  <h2>My Account</h2>
+  <p>
+    You are currently logged in as <strong><%= user_email %></strong>.
+
+    <%= link_to('<button>Log out</button>'.html_safe, users_logout_path, method: :delete) %>
+  </p>
+
+  <hr/>
+
+  <h2>My API Token</h2>
+
+  <pre><%= user_api_token %></pre>
+
+  <%= link_to(
+    '<button>Generate new API token</button>'.html_safe,
+    todos_user_api_token_path(token: user_api_token),
+    method: :put,
+    data: {confirm: 'Are you sure to generate a new API token?'}
+  ) %>
+
+  <h3>Examples of API requests via cURL</h3>
+
+  <% api_data = {user_api_token:, api_base_url:} %>
+
+  <%= render(partial: 'todos/user/api_doc/creating_a_todo', locals: api_data) %>
+  <%= render(partial: 'todos/user/api_doc/listing_todos', locals: api_data) %>
+  <%= render(partial: 'todos/user/api_doc/getting_a_todo', locals: api_data) %>
+  <%= render(partial: 'todos/user/api_doc/updating_todo_description', locals: api_data) %>
+  <%= render(partial: 'todos/user/api_doc/completing_a_todo', locals: api_data) %>
+  <%= render(partial: 'todos/user/api_doc/uncompleting_a_todo', locals: api_data) %>
+  <%= render(partial: 'todos/user/api_doc/deleting_a_todo', locals: api_data) %>
+</main>

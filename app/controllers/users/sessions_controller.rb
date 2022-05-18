@@ -3,6 +3,10 @@
 module Users
   class SessionsController < BaseController
     def new
+      request.env.dig('todo_bcdd', :unauthenticated).then do |message|
+        flash.now.alert = message if message
+      end
+
       render('users/sessions/new', locals: {user_email: nil})
     end
 

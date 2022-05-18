@@ -30,24 +30,46 @@ Rails.application.routes.draw do
       delete '/logout', to: 'sessions#destroy'
     end
 
-    namespace :todos do
-      get '/new', to: 'item#new'
+    root to: redirect('/todos/uncompleted', status: 302), as: :users_root
+  end
 
-      get '/edit/:id', to: 'item#edit', as: :edit
+  namespace :todos do
+    get '/new', to: 'item#new'
 
-      post   '/', to: 'item#create'
-      put    '/:id', to: 'item#update', as: :item
-      delete '/:id', to: 'item#delete'
-      put    '/:id/complete', to: 'item/complete#update', as: :complete_item
-      put    '/:id/uncomplete', to: 'item/uncomplete#update', as: :uncomplete_item
+    get '/edit/:id', to: 'item#edit', as: :edit
 
-      scope module: :list do
-        get '/completed', to: 'completed#index'
-        get '/uncompleted', to: 'uncompleted#index'
-      end
+    post   '/', to: 'item#create'
+    put    '/:id', to: 'item#update', as: :item
+    delete '/:id', to: 'item#delete'
+    put    '/:id/complete', to: 'item/complete#update', as: :complete_item
+    put    '/:id/uncomplete', to: 'item/uncomplete#update', as: :uncomplete_item
+
+    scope module: :list do
+      get '/completed', to: 'completed#index'
+      get '/uncompleted', to: 'uncompleted#index'
     end
 
-    root to: redirect('/todos/uncompleted', status: 302), as: :users_root
+    namespace :user do
+      get '/account', to: 'account#show'
+      put '/api_token/:token', to: 'api_token#update', as: :api_token
+    end
+  end
+
+  namespace :api do
+    constraints format: :json do
+      namespace :v1 do
+        namespace :todos do
+          get    '/'    => 'item#index'
+          get    '/:id' => 'item#show', as: :item
+          post   '/'    => 'item#create'
+          put    '/:id' => 'item#update'
+          delete '/:id' => 'item#delete'
+
+          put '/:id/complete' => 'item/complete#update'
+          put '/:id/uncomplete' => 'item/uncomplete#update'
+        end
+      end
+    end
   end
 
   match '/404', to: 'errors#not_found', via: :all

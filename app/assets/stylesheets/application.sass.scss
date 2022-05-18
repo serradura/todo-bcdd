@@ -35,3 +35,7 @@ body {
   padding: 1.5rem;
   margin-top: 2rem;
 }
+
+a[data-method="delete"] button {
+  background-color: var(--code);
+}

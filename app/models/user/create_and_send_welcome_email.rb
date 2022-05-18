@@ -19,7 +19,9 @@ class User::CreateAndSendWelcomeEmail < ::Micro::Case
 
     encrypted_password = ::BCrypt::Password.create(password)
 
-    user = ::User.new(email:, encrypted_password:)
+    api_token = SecureRandom.base58(36)
+
+    user = ::User.new(email:, encrypted_password:, api_token:)
 
     if user.save
       ::UserMailer.with(email:).welcome.deliver_later

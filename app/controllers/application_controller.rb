@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user
-      warden.user
+      warden.user(:user)
+    end
+
+    def authenticate_user!
+      warden.authenticate!(:password, scope: :user)
     end
 end

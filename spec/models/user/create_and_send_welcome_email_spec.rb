@@ -237,7 +237,10 @@ RSpec.describe User::CreateAndSendWelcomeEmail, type: :use_case do
             described_class.call(email:, password:, password_confirmation:)
           }.to change { ::User.count }.by(1)
 
-          expect(::User.last.email).to be == email
+          user = ::User.last
+
+          expect(user.email).to be == email
+          expect(user.api_token.size).to be == 36
         end
 
         it 'sends an email in background' do
