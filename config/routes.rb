@@ -32,7 +32,14 @@ Rails.application.routes.draw do
 
     namespace :todos do
       get '/new', to: 'item#new'
+
       get '/edit/:id', to: 'item#edit', as: :edit
+
+      post   '/', to: 'item#create'
+      put    '/:id', to: 'item#update', as: :item
+      delete '/:id', to: 'item#delete'
+      put    '/:id/complete', to: 'item/complete#update', as: :complete_item
+      put    '/:id/uncomplete', to: 'item/uncomplete#update', as: :uncomplete_item
 
       scope module: :list do
         get '/completed', to: 'completed#index'

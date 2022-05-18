@@ -1,7 +1,17 @@
+<%= render(partial: 'todos/item/form/errors', locals: {errors: form_errors}) %>
+
 <%= render(partial: 'todos/shared/header', locals: {current: 'edit'}) %>
 
 <main>
   <h2>Edit item #1</h2>
 
-  <%= render(partial: 'form', locals: {action_name: 'Update'}) %>
+  <%= render(
+    partial: 'form',
+    locals: {
+      url: todos_item_path(id: todo_id, previous:),
+      method: :put,
+      action_name: 'Update',
+      description: todo_description
+    }
+  ) %>
 </main>

@@ -1,7 +1,14 @@
 <%= render(partial: 'todos/shared/header', locals: {current: 'completed'}) %>
 
 <main>
-  <h2>Completed (1)</h2>
+  <h2>Completed (<%= todos.size %>)</h2>
 
-  <%= render(partial: 'todos/list/items', locals: {action_to_toggle_state: 'uncomplete'}) %>
+  <% if todos.present? %>
+    <%= render(
+      partial: 'todos/list/items',
+      locals: {todos:, current: 'completed', action_to_toggle_state: 'uncomplete'}
+    ) %>
+  <% else %>
+    <blockquote>Nothing done.</blockquote>
+  <% end %>
 </main>

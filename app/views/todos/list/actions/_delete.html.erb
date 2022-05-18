@@ -1,1 +1,6 @@
-<button>Delete</button>
+<%= link_to(
+  '<button>Delete</button>'.html_safe,
+  todos_item_path(previous:, id: todo.id),
+  method: :delete,
+  data: { confirm: 'Are you sure about deleting it?' }
+) %>

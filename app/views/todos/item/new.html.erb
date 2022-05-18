@@ -1,7 +1,17 @@
+<%= render(partial: 'todos/item/form/errors', locals: {errors: form_errors}) %>
+
 <%= render(partial: 'todos/shared/header', locals: {current: 'new'}) %>
 
 <main>
   <h2>New item</h2>
 
-  <%= render(partial: 'form', locals: {action_name: 'Create'}) %>
+  <%= render(
+    partial: 'form',
+    locals: {
+      url: todos_path,
+      method: :post,
+      action_name: 'Create',
+      description: description
+    }
+  ) %>
 </main>

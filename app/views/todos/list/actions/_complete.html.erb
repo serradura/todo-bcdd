@@ -1,1 +1,6 @@
-<button>Complete</button>
+<%= link_to(
+  '<button>Complete</button>'.html_safe,
+  todos_complete_item_path(id: todo.id),
+  method: :put,
+  data: { confirm: 'Are you sure about completing it?' }
+) %>

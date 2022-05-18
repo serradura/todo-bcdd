@@ -1,7 +1,7 @@
-<%= form_for(:todo, as: :todo, url: '/', html: { method: :post }) do |f| %>
+<%= form_for(:todo, as: :todo, url:, html: { method: }) do |f| %>
   <p>
     <%= f.label :description %><br />
-    <%= f.text_area :description, autofocus: true %>
+    <%= f.text_area :description, autofocus: true, value: description %>
   </p>
 
   <p>

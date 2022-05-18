@@ -1,0 +1,13 @@
+<% if errors.present? %>
+  <p class="notice">
+    <strong>
+      Please, review <%= errors.size %> <%= 'error'.pluralize(errors.size) %> in this form:
+    </strong>
+
+    <br />
+
+    <% errors.each do |field, message| %>
+      * <%= field.to_s.humanize %>: <%= message %><br />
+    <% end %>
+  </p>
+<% end %>

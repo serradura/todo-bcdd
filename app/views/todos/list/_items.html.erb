@@ -6,11 +6,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Buy Milk</td>
-      <td><%= render(partial: 'todos/list/actions/edit') %></td>
-      <td><%= render(partial: 'todos/list/actions/delete') %></td>
-      <td><%= render(partial: "todos/list/actions/#{action_to_toggle_state}") %></td>
-    </tr>
+    <% todos.each do |todo| %>
+      <tr>
+        <td><%= todo.description %></td>
+        <td><%= render(partial: 'todos/list/actions/edit', locals: {todo:, previous: current}) %></td>
+        <td><%= render(partial: "todos/list/actions/#{action_to_toggle_state}", locals: {todo:}) %></td>
+        <td><%= render(partial: 'todos/list/actions/delete', locals: {todo:, previous: current}) %></td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
