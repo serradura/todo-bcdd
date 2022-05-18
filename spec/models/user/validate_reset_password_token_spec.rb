@@ -43,8 +43,11 @@ RSpec.describe User::ValidateResetPasswordToken, type: :use_case do
     end
 
     describe 'success' do
-      let!(:user) { create(:user, reset_password_token: token) }
-      let!(:token) { ::SecureRandom.uuid }
+      let(:token) { ::SecureRandom.uuid }
+
+      before do
+        create(:user, reset_password_token: token)
+      end
 
       it 'returns a successful result' do
         result = described_class.call(token:)

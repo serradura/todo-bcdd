@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe 'associations' do
     describe 'has_many' do
-      it { is_expected.to have_many(:todos) }
+      it { is_expected.to have_many(:todos).dependent(nil) }
     end
   end
 
