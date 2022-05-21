@@ -1,20 +1,22 @@
 # frozen_string_literal: true
 
-module Todo::Item
-  class Record < ApplicationRecord
-    self.table_name = 'todos'
+module Todo
+  module Item
+    class Record < ApplicationRecord
+      self.table_name = 'todos'
 
-    belongs_to :user
+      belongs_to :user, class_name: '::User::Record'
 
-    scope :completed, -> { where.not(completed_at: nil) }
-    scope :uncompleted, -> { where(completed_at: nil) }
+      scope :completed, -> { where.not(completed_at: nil) }
+      scope :uncompleted, -> { where(completed_at: nil) }
 
-    validates :description, presence: true
+      validates :description, presence: true
 
-    def status = completed? ? :completed : :uncompleted
+      def status = completed? ? Status::COMPLETED : Status::UNCOMPLETED
 
-    def completed? = completed_at.present?
+      def completed? = completed_at.present?
 
-    def uncompleted? = !completed?
+      def uncompleted? = !completed?
+    end
   end
 end
