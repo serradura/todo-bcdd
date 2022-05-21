@@ -14,7 +14,7 @@ module User::ResetPassword
 
       return Failure(:user_not_found) if updated.zero?
 
-      ::UserMailer.with(email:, reset_password_token:).reset_password.deliver_later
+      ::User::Mailer.with(email:, reset_password_token:).reset_password.deliver_later
 
       Success(:instructions_delivered)
     end

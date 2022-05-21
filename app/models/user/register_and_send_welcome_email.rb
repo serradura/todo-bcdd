@@ -25,7 +25,7 @@ module User
       user = Record.new(email:, encrypted_password:, api_token:)
 
       if user.save
-        ::UserMailer.with(email:).welcome.deliver_later
+        ::User::Mailer.with(email:).welcome.deliver_later
 
         Success :user_created, result: {user:}
       else

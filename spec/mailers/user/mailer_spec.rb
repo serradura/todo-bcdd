@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe UserMailer, type: :mailer do
+RSpec.describe User::Mailer, type: :mailer do
   describe 'welcome' do
-    subject(:mail) { ::UserMailer.with(email: 'email@example.com').welcome }
+    subject(:mail) { ::User::Mailer.with(email: 'email@example.com').welcome }
 
     it 'renders the headers' do
       expect(mail.to).to contain_exactly('email@example.com')
@@ -22,7 +22,7 @@ RSpec.describe UserMailer, type: :mailer do
   end
 
   describe 'reset_password' do
-    subject(:mail) { ::UserMailer.with(email:, reset_password_token:).reset_password }
+    subject(:mail) { ::User::Mailer.with(email:, reset_password_token:).reset_password }
 
     let(:email) { 'email@example.com' }
     let(:reset_password_token) { ::SecureRandom.uuid }

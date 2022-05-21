@@ -93,7 +93,7 @@ RSpec.describe User::ResetPassword::SendInstructions, type: :use_case do
           }.to(
             have_enqueued_job(ActionMailer::MailDeliveryJob)
               .on_queue('default')
-              .with('UserMailer', 'reset_password', any_args)
+              .with('User::Mailer', 'reset_password', any_args)
           )
         end
       end

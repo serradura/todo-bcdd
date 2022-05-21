@@ -249,7 +249,7 @@ RSpec.describe User::RegisterAndSendWelcomeEmail, type: :use_case do
           }.to(
             have_enqueued_job(ActionMailer::MailDeliveryJob)
               .on_queue('default')
-              .with('UserMailer', 'welcome', any_args)
+              .with('User::Mailer', 'welcome', any_args)
           )
         end
       end
