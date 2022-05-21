@@ -5,17 +5,13 @@ module User::ResetPassword
     TrimmedString = ->(value) { String(value).strip }
 
     attribute :token, default: ->(value) { Token.new(value) }
-    attribute :password, default: TrimmedString
-    attribute :password_confirmation, default: TrimmedString
+    attribute :password, default: ->(value) { ::User::Password.new(value) }
+    attribute :password_confirmation, default: ->(value) { ::User::Password.new(value) }
 
     def call!
       return Failure(:invalid_token) unless token.valid?
 
-      errors = {}
-      errors[:password] = "can't be blank" if password.blank?
-      errors[:password] ||= 'is too short (minimum: 6)' if password.size < 6
-      errors[:password_confirmation] = "can't be blank" if password_confirmation.blank?
-      errors[:password_confirmation] ||= "doesn't match password" if password != password_confirmation
+      errors = ::User::Password.validate(password:, confirmation: password_confirmation)
 
       return Failure(:invalid_password, result: {errors:}) if errors.present?
 
@@ -23,9 +19,7 @@ module User::ResetPassword
 
       return Failure(:user_not_found) unless user
 
-      encrypted_password = ::BCrypt::Password.create(password)
-
-      user.update!(encrypted_password:, reset_password_token: nil)
+      user.update!(reset_password_token: nil, encrypted_password: password.encrypted)
 
       Success :user_password_changed, result: {user:}
     end
