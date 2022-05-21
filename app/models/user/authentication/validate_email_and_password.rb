@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::ValidateEmailAndPassword < ::Micro::Case
+class User::Authentication::ValidateEmailAndPassword < ::Micro::Case
   TrimmedString = ->(value) { String(value).strip }
 
   attribute :email, default: TrimmedString

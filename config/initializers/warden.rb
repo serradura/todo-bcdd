@@ -33,13 +33,13 @@ end
   def valid?
     email_and_password = scoped_params.slice('email', 'password')
 
-    ::User::ValidateEmailAndPassword.call(email_and_password).success?
+    ::User::Authentication::ValidateEmailAndPassword.call(email_and_password).success?
   end
 
   def authenticate!
     email_and_password = scoped_params.slice('email', 'password')
 
-    ::User::Authenticate.call(email_and_password) do |on|
+    ::User::Authentication::Process.call(email_and_password) do |on|
       on.failure { fail!('Incorrect email or password.') }
       on.success { |result| success!(result[:user]) }
     end
@@ -55,7 +55,7 @@ end
 ::Warden::Manager.serialize_into_session(:user, &:id)
 
 ::Warden::Manager.serialize_from_session(:user) do |id|
-  ::User::Find.call(id:) do |on|
+  ::User::Authentication::GetById.call(id:) do |on|
     on.failure { raise NotImplementedError }
     on.success { |result| result[:user] }
   end

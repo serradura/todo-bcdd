@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::Find, type: :use_case do
+RSpec.describe User::Authentication::GetById, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the id is blank' do

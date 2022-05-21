@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::Find < ::Micro::Case
+class User::Authentication::GetById < ::Micro::Case
   attribute :id, validates: {numericality: {only_integer: true}}
 
   def call!

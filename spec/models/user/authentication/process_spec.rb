@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::Authenticate, type: :use_case do
+RSpec.describe User::Authentication::Process, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the user is not found' do

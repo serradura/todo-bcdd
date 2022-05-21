@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::ValidateEmailAndPassword, type: :use_case do
+RSpec.describe User::Authentication::ValidateEmailAndPassword, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the password is blank' do
