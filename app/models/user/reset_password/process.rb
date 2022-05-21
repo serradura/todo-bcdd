@@ -1,17 +1,15 @@
 # frozen_string_literal: true
 
-module User
-  class ResetPassword::Process < ::Micro::Case
+module User::ResetPassword
+  class Process < ::Micro::Case
     TrimmedString = ->(value) { String(value).strip }
 
-    attribute :token, default: TrimmedString
+    attribute :token, default: ->(value) { Token.new(value) }
     attribute :password, default: TrimmedString
     attribute :password_confirmation, default: TrimmedString
 
-    UUID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
-
     def call!
-      return Failure(:invalid_token) unless UUID_FORMAT.match?(token)
+      return Failure(:invalid_token) unless token.valid?
 
       errors = {}
       errors[:password] = "can't be blank" if password.blank?
@@ -21,7 +19,7 @@ module User
 
       return Failure(:invalid_password, result: {errors:}) if errors.present?
 
-      user = Record.find_by(reset_password_token: token)
+      user = ::User::Record.find_by(reset_password_token: token.value)
 
       return Failure(:user_not_found) unless user
 

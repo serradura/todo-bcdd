@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-module User
-  class ResetPassword::SendInstructions < ::Micro::Case
+module User::ResetPassword
+  class SendInstructions < ::Micro::Case
     attribute :email, {
       default: ->(value) { String(value).strip.downcase },
       validates: {format: ::URI::MailTo::EMAIL_REGEXP}
     }
 
     def call!
-      reset_password_token = ::SecureRandom.uuid
+      reset_password_token = Token.generate.value
 
-      updated = Record.where(email:).update_all(reset_password_token:)
+      updated = ::User::Record.where(email:).update_all(reset_password_token:)
 
       return Failure(:user_not_found) if updated.zero?
 
