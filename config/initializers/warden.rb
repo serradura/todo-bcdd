@@ -31,9 +31,9 @@ end
 
 ::Warden::Strategies.add(:password) do
   def valid?
-    email_and_password = scoped_params.slice('email', 'password')
+    email, password = scoped_params.values_at('email', 'password')
 
-    ::User::Authentication::ValidateEmailAndPassword.call(email_and_password).success?
+    ::User::Email.new(email).valid? && ::User::Password.new(password).present?
   end
 
   def authenticate!
