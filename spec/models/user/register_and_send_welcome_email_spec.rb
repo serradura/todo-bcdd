@@ -227,7 +227,7 @@ RSpec.describe User::RegisterAndSendWelcomeEmail, type: :use_case do
           result = described_class.call(email:, password:, password_confirmation:)
 
           expect(result[:user])
-            .to be_a(::User)
+            .to be_a(::User::Record)
             .and be_persisted
             .and have_attributes(email:)
         end
@@ -235,9 +235,9 @@ RSpec.describe User::RegisterAndSendWelcomeEmail, type: :use_case do
         it 'creates an user' do
           expect {
             described_class.call(email:, password:, password_confirmation:)
-          }.to change { ::User.count }.by(1)
+          }.to change { ::User::Record.count }.by(1)
 
-          user = ::User.last
+          user = ::User::Record.last
 
           expect(user.email).to be == email
           expect(user.api_token.size).to be == 36

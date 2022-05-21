@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-class User::Authentication::GetById < ::Micro::Case
-  attribute :id, validates: {numericality: {only_integer: true}}
+module User
+  class Authentication::GetById < ::Micro::Case
+    attribute :id, validates: {numericality: {only_integer: true}}
 
-  def call!
-    user = ::User.find_by(id:)
+    def call!
+      user = Record.find_by(id:)
 
-    return Failure(:user_not_found) unless user
+      return Failure(:user_not_found) unless user
 
-    Success :user_found, result: {user:}
+      Success :user_found, result: {user:}
+    end
   end
 end

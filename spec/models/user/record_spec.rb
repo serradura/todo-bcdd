@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User::Record, type: :model do
   describe 'associations' do
     describe 'has_many' do
-      it { is_expected.to have_many(:todos).dependent(nil) }
+      it { is_expected.to have_many(:todos).dependent(nil).class_name('::Todo::Item::Record') }
     end
   end
 
