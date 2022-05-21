@@ -65,7 +65,7 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
       context 'when a todo is not found' do
         let!(:users) { create_list(:user, 2) }
         let!(:user) { users.last }
-        let!(:todo) { create(:todo, user: users.first) }
+        let!(:todo) { create(:todo_item, user: users.first) }
 
         it 'returns a failure result' do
           result = described_class.call(id: todo.id, user_id: user.id.to_s)
@@ -87,7 +87,7 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
       context 'when a todo is found' do
         let!(:user) { create(:user) }
         let!(:todo) do
-          create(:todo, user: user, created_at: 10.seconds.ago, completed_at: Time.current)
+          create(:todo_item, user: user, created_at: 10.seconds.ago, completed_at: Time.current)
         end
 
         it 'returns a successful result' do

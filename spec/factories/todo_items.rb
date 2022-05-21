@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :todo do
+  factory :todo_item, class: '::Todo::Item::Record' do
     user { nil }
     description { ::Faker::Hacker.say_something_smart }
     completed_at { nil }

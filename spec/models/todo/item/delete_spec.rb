@@ -65,7 +65,7 @@ RSpec.describe Todo::Item::Delete, type: :use_case do
       context 'when a todo is not found' do
         let!(:users) { create_list(:user, 2) }
         let!(:user) { users.last }
-        let!(:todo) { create(:todo, user: users.first) }
+        let!(:todo) { create(:todo_item, user: users.first) }
 
         it 'returns a failure result' do
           result = described_class.call(id: todo.id, user_id: user.id.to_s)
@@ -86,12 +86,12 @@ RSpec.describe Todo::Item::Delete, type: :use_case do
     describe 'success' do
       context 'when a todo is found' do
         let!(:user) { create(:user) }
-        let!(:todo) { create(:todo, user: user) }
+        let!(:todo) { create(:todo_item, user: user) }
 
         before do
           other_user = create(:user)
 
-          create(:todo, user: other_user)
+          create(:todo_item, user: other_user)
         end
 
         it 'returns a successful result' do
@@ -110,10 +110,10 @@ RSpec.describe Todo::Item::Delete, type: :use_case do
 
         it 'deletes the todo from the database' do
           expect { described_class.call(id: todo.id, user_id: user.id.to_s) }
-            .to change { Todo.where(user_id: user.id).count }
+            .to change { Todo::Item::Record.where(user_id: user.id).count }
             .from(1).to(0)
 
-          expect(Todo.last.user_id).not_to be == user.id
+          expect(Todo::Item::Record.last.user_id).not_to be == user.id
         end
       end
     end

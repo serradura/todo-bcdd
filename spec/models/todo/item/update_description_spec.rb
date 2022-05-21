@@ -88,7 +88,7 @@ RSpec.describe Todo::Item::UpdateDescription, type: :use_case do
       context 'when a todo is not found' do
         let!(:users) { create_list(:user, 2) }
         let!(:user) { users.last }
-        let!(:todo) { create(:todo, user: users.first) }
+        let!(:todo) { create(:todo_item, user: users.first) }
         let(:description) { Faker::Lorem.sentence(word_count: 3) }
 
         it 'returns a failure result' do
@@ -110,7 +110,7 @@ RSpec.describe Todo::Item::UpdateDescription, type: :use_case do
     describe 'success' do
       context 'when a todo is found' do
         let!(:user) { create(:user) }
-        let!(:todo) { create(:todo, user: user, created_at: 10.seconds.ago) }
+        let!(:todo) { create(:todo_item, user: user, created_at: 10.seconds.ago) }
         let(:description) { Faker::Lorem.sentence(word_count: 3) }
 
         it 'returns a successful result' do

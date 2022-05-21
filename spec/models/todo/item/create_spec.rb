@@ -118,7 +118,7 @@ RSpec.describe Todo::Item::Create, type: :use_case do
           result = described_class.call(user_id: user.id.to_s, description:)
 
           expect(result[:todo]).to have_attributes(
-            itself: be_a(Todo),
+            itself: be_a(Todo::Item::Record),
             user_id: user.id,
             persisted?: true,
             description: description
@@ -127,9 +127,9 @@ RSpec.describe Todo::Item::Create, type: :use_case do
 
         it 'creates a todo' do
           expect { described_class.call(user_id: user.id, description:) }
-            .to change { Todo.where(user: user.id).count }.by(1)
+            .to change { Todo::Item::Record.where(user: user.id).count }.by(1)
 
-          expect(::Todo.count).to be == 1
+          expect(::Todo::Item::Record.count).to be == 1
         end
       end
     end

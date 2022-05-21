@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_many :todos, dependent: nil
+  has_many :todos, dependent: nil, class_name: '::Todo::Item::Record'
 
   validates :email, {
     :presence   => true,

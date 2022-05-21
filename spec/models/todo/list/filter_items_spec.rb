@@ -100,7 +100,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
 
           expect(result[:todos]).to have_attributes(
             itself: ActiveRecord::Relation,
-            klass: Todo,
+            klass: Todo::Item::Record,
             empty?: true
           )
         end
@@ -109,11 +109,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
       context 'when user is found and the status is completed' do
         let(:status) { :completed }
         let!(:user) { create(:user) }
-        let!(:completed_todo) { create(:todo, :completed, user: user) }
+        let!(:completed_todo) { create(:todo_item, :completed, user: user) }
 
         before do
-          create(:todo, user: user)
-          create(:todo, :completed, user: create(:user))
+          create(:todo_item, user: user)
+          create(:todo_item, :completed, user: create(:user))
         end
 
         it 'returns a successful result' do
@@ -129,7 +129,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
 
           expect(result[:todos]).to have_attributes(
             itself: ActiveRecord::Relation,
-            klass: Todo,
+            klass: Todo::Item::Record,
             size: 1
           )
 
@@ -140,11 +140,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
       context 'when user is found and the status is uncompleted' do
         let(:status) { :uncompleted }
         let!(:user) { create(:user) }
-        let!(:uncompleted_todo) { create(:todo, user: user) }
+        let!(:uncompleted_todo) { create(:todo_item, user: user) }
 
         before do
-          create(:todo, :completed, user: user)
-          create(:todo, user: create(:user))
+          create(:todo_item, :completed, user: user)
+          create(:todo_item, user: create(:user))
         end
 
         it 'returns a successful result' do
@@ -160,7 +160,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
 
           expect(result[:todos]).to have_attributes(
             itself: ActiveRecord::Relation,
-            klass: Todo,
+            klass: Todo::Item::Record,
             size: 1
           )
 

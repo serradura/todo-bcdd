@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe Todo, type: :model do
+RSpec.describe Todo::Item::Record, type: :model do
+  subject { build(:todo_item) }
+
   describe 'database indexes' do
     it { is_expected.to have_db_index([:user_id, :id]) }
   end
@@ -22,9 +24,9 @@ RSpec.describe Todo, type: :model do
   describe 'scopes' do
     describe '.completed' do
       let!(:user) { create(:user) }
-      let!(:completed) { create(:todo, :completed, user:) }
+      let!(:completed) { create(:todo_item, :completed, user:) }
 
-      before { create(:todo, user:) }
+      before { create(:todo_item, user:) }
 
       it 'filters completed records' do
         todos = described_class.completed.to_a
@@ -36,9 +38,9 @@ RSpec.describe Todo, type: :model do
 
     describe '.uncompleted' do
       let!(:user) { create(:user) }
-      let!(:uncompleted) { create(:todo, user:) }
+      let!(:uncompleted) { create(:todo_item, user:) }
 
-      before { create(:todo, :completed, user:) }
+      before { create(:todo_item, :completed, user:) }
 
       it 'filters uncompleted records' do
         todos = described_class.uncompleted.to_a
@@ -51,13 +53,13 @@ RSpec.describe Todo, type: :model do
 
   describe '#status' do
     context 'when it is completed' do
-      subject { build(:todo, :completed).status }
+      subject { build(:todo_item, :completed).status }
 
       it { is_expected.to be == :completed }
     end
 
     context 'when it is uncompleted' do
-      subject { build(:todo).status }
+      subject { build(:todo_item).status }
 
       it { is_expected.to be == :uncompleted }
     end
