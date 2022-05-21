@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::ResetPassword < ::Micro::Case
+class User::ResetPassword::Process < ::Micro::Case
   TrimmedString = ->(value) { String(value).strip }
 
   attribute :token, default: TrimmedString

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::ResetPassword, type: :use_case do
+RSpec.describe User::ResetPassword::Process, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the token is invalid' do

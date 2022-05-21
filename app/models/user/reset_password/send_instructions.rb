@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::SendInstructionsToResetPassword < ::Micro::Case
+class User::ResetPassword::SendInstructions < ::Micro::Case
   attribute :email, {
     default: ->(value) { String(value).strip.downcase },
     validates: {format: ::URI::MailTo::EMAIL_REGEXP}

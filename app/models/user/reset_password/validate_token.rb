@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::ValidateResetPasswordToken < ::Micro::Case
+class User::ResetPassword::ValidateToken < ::Micro::Case
   attribute :token, default: ->(value) { String(value).strip }
 
   UUID_FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
