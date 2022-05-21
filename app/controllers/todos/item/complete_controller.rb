@@ -3,7 +3,7 @@
 module Todos
   class Item::CompleteController < BaseController
     def update
-      ::Todo::Complete
+      ::Todo::Item::Complete
         .call(id: params[:id], user_id: current_user.id)
         .on_success { redirect_after_updating }
         .on_failure(:todo_not_found) { handle_todo_not_found }

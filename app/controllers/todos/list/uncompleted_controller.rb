@@ -3,7 +3,7 @@
 module Todos::List
   class UncompletedController < ::Todos::BaseController
     def index
-      ::Todo::Filter
+      ::Todo::List::FilterItems
         .call(user_id: current_user.id, status: :uncompleted)
         .on_failure { raise NotImplementedError }
         .on_success do |result|

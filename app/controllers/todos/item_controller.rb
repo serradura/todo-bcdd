@@ -9,7 +9,7 @@ module Todos
     def create
       description = params.require(:todo)[:description]
 
-      ::Todo::Create
+      ::Todo::Item::Create
         .call(description:, user_id: current_user.id)
         .on_success { redirect_after_creating }
         .on_failure(:user_not_found) { raise NotImplementedError }
@@ -21,7 +21,7 @@ module Todos
     end
 
     def edit
-      ::Todo::Find
+      ::Todo::Item::Find
         .call(id: params[:id], user_id: current_user.id)
         .on_success { |result| render_edit_with_todo(result[:todo]) }
         .on_failure(:todo_not_found) { handle_todo_not_found }
@@ -31,7 +31,7 @@ module Todos
     def update
       description = params.require(:todo)[:description]
 
-      ::Todo::UpdateDescription
+      ::Todo::Item::UpdateDescription
         .call(description:, id: params[:id], user_id: current_user.id)
         .on_success { redirect_after_updating }
         .on_failure(:todo_not_found) { handle_todo_not_found }
@@ -40,7 +40,7 @@ module Todos
     end
 
     def delete
-      ::Todo::Delete
+      ::Todo::Item::Delete
         .call(id: params[:id], user_id: current_user.id)
         .on_success { redirect_after_deleting }
         .on_failure(:todo_not_found) { handle_todo_not_found }

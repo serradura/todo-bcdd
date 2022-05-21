@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Todo::Delete < ::Micro::Case
+class Todo::Item::Delete < ::Micro::Case
   attribute :id, validates: {numericality: {only_integer: true}}
   attribute :user_id, validates: {numericality: {only_integer: true}}
 

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Todo::Create, type: :use_case do
+RSpec.describe Todo::Item::Create, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the description is blank' do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Todo::Complete, type: :use_case do
+RSpec.describe Todo::Item::Delete, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the ids are blank' do
@@ -58,7 +58,7 @@ RSpec.describe Todo::Complete, type: :use_case do
         it 'exposes the validation errors' do
           result = described_class.call(id:, user_id:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id)
+          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id, :user_id)
         end
       end
 
@@ -86,26 +86,34 @@ RSpec.describe Todo::Complete, type: :use_case do
     describe 'success' do
       context 'when a todo is found' do
         let!(:user) { create(:user) }
-        let!(:todo) { create(:todo, user: user, created_at: 10.seconds.ago) }
+        let!(:todo) { create(:todo, user: user) }
+
+        before do
+          other_user = create(:user)
+
+          create(:todo, user: other_user)
+        end
 
         it 'returns a successful result' do
           result = described_class.call(id: todo.id.to_s, user_id: user.id)
 
           expect(result).to be_a_success
-          expect(result.type).to be(:todo_completed)
-          expect(result.data.keys).to contain_exactly(:todo_completed)
+          expect(result.type).to be(:todo_deleted)
+          expect(result.data.keys).to contain_exactly(:todo_deleted)
         end
 
-        it 'exposes todo_completed' do
+        it 'exposes todo_deleted' do
           result = described_class.call(id: todo.id, user_id: user.id.to_s)
 
-          expect(result[:todo_completed]).to be(true)
+          expect(result[:todo_deleted]).to be(true)
         end
 
-        it 'changes the todo completed_at' do
+        it 'deletes the todo from the database' do
           expect { described_class.call(id: todo.id, user_id: user.id.to_s) }
-            .to change { todo.reload.completed_at }
-            .from(nil).to be_a(ActiveSupport::TimeWithZone)
+            .to change { Todo.where(user_id: user.id).count }
+            .from(1).to(0)
+
+          expect(Todo.last.user_id).not_to be == user.id
         end
       end
     end

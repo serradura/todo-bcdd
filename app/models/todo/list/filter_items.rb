@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Todo::Filter < ::Micro::Case
+class Todo::List::FilterItems < ::Micro::Case
   attribute :status, validates: {inclusion: {in: [:completed, :uncompleted]}}
   attribute :user_id, validates: {numericality: {only_integer: true}}
 

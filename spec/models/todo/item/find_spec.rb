@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Todo::Uncomplete, type: :use_case do
+RSpec.describe Todo::Item::Find, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the ids are blank' do
@@ -85,29 +85,22 @@ RSpec.describe Todo::Uncomplete, type: :use_case do
 
     describe 'success' do
       context 'when a todo is found' do
-        let!(:user) { create(:user) }
-        let!(:todo) do
-          create(:todo, user: user, created_at: 10.seconds.ago, completed_at: Time.current)
-        end
+        let!(:users) { create_list(:user, 2) }
+        let!(:user) { users.first }
+        let!(:todo) { create(:todo, user: user) }
 
         it 'returns a successful result' do
           result = described_class.call(id: todo.id.to_s, user_id: user.id)
 
           expect(result).to be_a_success
-          expect(result.type).to be(:todo_uncompleted)
-          expect(result.data.keys).to contain_exactly(:todo_uncompleted)
+          expect(result.type).to be(:todo_found)
+          expect(result.data.keys).to contain_exactly(:todo)
         end
 
-        it 'exposes todo_uncompleted' do
+        it 'exposes the todo' do
           result = described_class.call(id: todo.id, user_id: user.id.to_s)
 
-          expect(result[:todo_uncompleted]).to be(true)
-        end
-
-        it 'changes the todo completed_at' do
-          expect { described_class.call(id: todo.id, user_id: user.id.to_s) }
-            .to change { todo.reload.completed_at }
-            .from(be_a(ActiveSupport::TimeWithZone)).to(nil)
+          expect(result[:todo]).to be == todo
         end
       end
     end

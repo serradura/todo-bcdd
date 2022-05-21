@@ -3,14 +3,14 @@
 module API::V1::Todos
   class ItemController < BaseController
     def index
-      ::Todo::Filter
+      ::Todo::List::FilterItems
         .call(user_id: current_user.id, status: params[:status]&.to_sym)
         .on_success { |result| render_todos(result) }
         .on_failure(:invalid_attributes) { |result| render_activemodel_errors(result[:errors]) }
     end
 
     def show
-      ::Todo::Find
+      ::Todo::Item::Find
         .call(id: params[:id], user_id: current_user.id)
         .on_success { |result| render_todo(result) }
         .on_failure(:todo_not_found) { render_json(status: :not_found) }
@@ -20,7 +20,7 @@ module API::V1::Todos
     def create
       description = params.require(:todo)[:description]
 
-      ::Todo::Create
+      ::Todo::Item::Create
         .call(description:, user_id: current_user.id)
         .on_success { |result| render_todo(result) }
         .on_failure(:user_not_found) { raise NotImplementedError }
@@ -32,7 +32,7 @@ module API::V1::Todos
     def update
       description = params.require(:todo)[:description]
 
-      ::Todo::UpdateDescription
+      ::Todo::Item::UpdateDescription
         .call(description:, id: params[:id], user_id: current_user.id)
         .on_success { render_json }
         .on_failure(:todo_not_found) { render_json(status: 404) }
@@ -43,7 +43,7 @@ module API::V1::Todos
     end
 
     def delete
-      ::Todo::Delete
+      ::Todo::Item::Delete
         .call(id: params[:id], user_id: current_user.id)
         .on_success { render_json }
         .on_failure(:todo_not_found) { render_json(status: 404) }

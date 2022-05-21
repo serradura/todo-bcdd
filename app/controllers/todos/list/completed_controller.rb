@@ -3,7 +3,7 @@
 module Todos::List
   class CompletedController < ::Todos::BaseController
     def index
-      ::Todo::Filter
+      ::Todo::List::FilterItems
         .call(user_id: current_user.id, status: :completed)
         .on_failure { raise NotImplementedError }
         .on_success do |result|

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Todo::Delete, type: :use_case do
+RSpec.describe Todo::Item::Uncomplete, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the ids are blank' do
@@ -86,34 +86,28 @@ RSpec.describe Todo::Delete, type: :use_case do
     describe 'success' do
       context 'when a todo is found' do
         let!(:user) { create(:user) }
-        let!(:todo) { create(:todo, user: user) }
-
-        before do
-          other_user = create(:user)
-
-          create(:todo, user: other_user)
+        let!(:todo) do
+          create(:todo, user: user, created_at: 10.seconds.ago, completed_at: Time.current)
         end
 
         it 'returns a successful result' do
           result = described_class.call(id: todo.id.to_s, user_id: user.id)
 
           expect(result).to be_a_success
-          expect(result.type).to be(:todo_deleted)
-          expect(result.data.keys).to contain_exactly(:todo_deleted)
+          expect(result.type).to be(:todo_uncompleted)
+          expect(result.data.keys).to contain_exactly(:todo_uncompleted)
         end
 
-        it 'exposes todo_deleted' do
+        it 'exposes todo_uncompleted' do
           result = described_class.call(id: todo.id, user_id: user.id.to_s)
 
-          expect(result[:todo_deleted]).to be(true)
+          expect(result[:todo_uncompleted]).to be(true)
         end
 
-        it 'deletes the todo from the database' do
+        it 'changes the todo completed_at' do
           expect { described_class.call(id: todo.id, user_id: user.id.to_s) }
-            .to change { Todo.where(user_id: user.id).count }
-            .from(1).to(0)
-
-          expect(Todo.last.user_id).not_to be == user.id
+            .to change { todo.reload.completed_at }
+            .from(be_a(ActiveSupport::TimeWithZone)).to(nil)
         end
       end
     end

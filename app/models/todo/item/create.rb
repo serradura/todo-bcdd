@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Todo::Create < ::Micro::Case
+class Todo::Item::Create < ::Micro::Case
   attribute :user_id, validates: {numericality: {only_integer: true}}
   attribute :description, validates: {presence: true}
 
