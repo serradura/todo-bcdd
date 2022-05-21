@@ -2,17 +2,15 @@
 
 module User
   class Authentication::Process < ::Micro::Case
-    TrimmedString = ->(value) { String(value).strip }
-
-    attribute :email, default: TrimmedString >> lambda(&:downcase)
-    attribute :password, default: TrimmedString
+    attribute :email, default: ->(value) { ::User::Email.new(value) }
+    attribute :password, default: ->(value) { ::User::Password.new(value) }
 
     def call!
-      user = Record.find_by(email:)
+      user = Record.find_by(email: email.value)
 
       return Failure(:user_not_found) unless user
 
-      return Failure(:invalid_password) if ::BCrypt::Password.new(user.encrypted_password) != password
+      return Failure(:invalid_password) unless ::User::Password.match?(user.encrypted_password, password)
 
       Success :user_found, result: {user:}
     end

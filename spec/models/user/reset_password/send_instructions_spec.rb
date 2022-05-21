@@ -12,14 +12,14 @@ RSpec.describe User::ResetPassword::SendInstructions, type: :use_case do
           result = described_class.call(email:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_email)
+          expect(result.data.keys).to contain_exactly(:invalid_email)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes invalid_email' do
           result = described_class.call(email:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:email)
+          expect(result[:invalid_email]).to be(true)
         end
       end
 
@@ -30,14 +30,13 @@ RSpec.describe User::ResetPassword::SendInstructions, type: :use_case do
           result = described_class.call(email:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_email)
         end
 
         it 'exposes the validation errors' do
           result = described_class.call(email:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:email)
+          expect(result[:invalid_email]).to be(true)
         end
       end
 

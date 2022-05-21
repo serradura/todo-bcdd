@@ -2,8 +2,6 @@
 
 module User::ResetPassword
   class Process < ::Micro::Case
-    TrimmedString = ->(value) { String(value).strip }
-
     attribute :token, default: ->(value) { Token.new(value) }
     attribute :password, default: ->(value) { ::User::Password.new(value) }
     attribute :password_confirmation, default: ->(value) { ::User::Password.new(value) }

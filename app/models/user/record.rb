@@ -8,7 +8,7 @@ module User
 
     validates :email, {
       :presence   => true,
-      :format     => ::URI::MailTo::EMAIL_REGEXP,
+      :format     => Email::FORMAT,
       :uniqueness => true
     }
 

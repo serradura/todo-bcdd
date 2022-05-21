@@ -2,19 +2,18 @@
 
 module User::ResetPassword
   class SendInstructions < ::Micro::Case
-    attribute :email, {
-      default: ->(value) { String(value).strip.downcase },
-      validates: {format: ::URI::MailTo::EMAIL_REGEXP}
-    }
+    attribute :email, default: ->(value) { ::User::Email.new(value) }
 
     def call!
+      return Failure(:invalid_email) if email.invalid?
+
       reset_password_token = Token.generate.value
 
-      updated = ::User::Record.where(email:).update_all(reset_password_token:)
+      updated = ::User::Record.where(email: email.value).update_all(reset_password_token:)
 
       return Failure(:user_not_found) if updated.zero?
 
-      ::User::Mailer.with(email:, reset_password_token:).reset_password.deliver_later
+      ::User::Mailer.with(email: email.value, reset_password_token:).reset_password.deliver_later
 
       Success(:instructions_delivered)
     end

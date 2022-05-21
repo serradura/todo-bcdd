@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class User::Password
+  def self.value(object)
+    object.is_a?(self) ? object.value : String(object).strip
+  end
+
+  def self.match?(encrypted, password)
+    ::BCrypt::Password.new(encrypted) == value(password)
+  end
+
   def self.validate(password:, confirmation:)
     errors = {}
     errors[:password] = password.validation_error if password.invalid?
@@ -12,8 +20,11 @@ class User::Password
   attr_reader :value, :validation_error
 
   def initialize(object)
-    @value = object.is_a?(self.class) ? object.value : String(object).strip
-    @validation_error = nil
+    @value = self.class.value(object)
+  end
+
+  def present?
+    value.present?
   end
 
   MINIMUM = 6
