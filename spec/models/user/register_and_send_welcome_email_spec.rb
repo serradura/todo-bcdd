@@ -219,7 +219,7 @@ RSpec.describe User::RegisterAndSendWelcomeEmail, type: :use_case do
           result = described_class.call(email:, password:, password_confirmation:)
 
           expect(result).to be_a_success
-          expect(result.type).to be(:user_created)
+          expect(result.type).to be(:user_registered)
           expect(result.data.keys).to contain_exactly(:user)
         end
 
