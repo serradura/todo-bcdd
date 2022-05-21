@@ -20,7 +20,7 @@ module User
 
       encrypted_password = ::BCrypt::Password.create(password)
 
-      api_token = SecureRandom.base58(36)
+      api_token = APIToken::Value.generate
 
       user = Record.new(email:, encrypted_password:, api_token:)
 

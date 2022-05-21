@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-module User
-  class APIToken::Generate < ::Micro::Case
-    attribute :token, validates: {presence: true, length: {is: 36}}
+module User::APIToken
+  class Generate < ::Micro::Case
+    attribute :token, validates: {presence: true, length: {is: Value::LENGTH}}
 
     def call!
-      new_api_token = SecureRandom.base58(36)
-
-      updated = Record.where(api_token: token).update_all(api_token: new_api_token)
+      updated = ::User::Record.where(api_token: token).update_all(api_token: Value.generate)
 
       return Failure(:user_not_found) if updated.zero?
 

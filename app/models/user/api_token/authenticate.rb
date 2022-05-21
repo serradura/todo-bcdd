@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module User
-  class APIToken::Authenticate < ::Micro::Case
-    attribute :token, validates: {presence: true, length: {is: 36}}
+module User::APIToken
+  class Authenticate < ::Micro::Case
+    attribute :token, validates: {presence: true, length: {is: Value::LENGTH}}
 
     def call!
-      user = Record.find_by(api_token: token)
+      user = ::User::Record.find_by(api_token: token)
 
       return Failure(:user_not_found) unless user
 
