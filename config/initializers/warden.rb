@@ -67,11 +67,10 @@ end
   end
 
   def authenticate!
-    user = ::User.find_by(api_token: access_token)
-
-    return success!(user) if user
-
-    fail!('Invalid access_token')
+    ::User::APIToken::Authenticate.call(token: access_token) do |on|
+      on.success { |result| success!(result[:user]) }
+      on.failure { fail!('Invalid access_token') }
+    end
   end
 
   private

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::GenerateNewAPIToken, type: :use_case do
+RSpec.describe User::APIToken::Authenticate, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the token is blank' do
@@ -69,22 +69,14 @@ RSpec.describe User::GenerateNewAPIToken, type: :use_case do
           result = described_class.call(token:)
 
           expect(result).to be_a_success
-          expect(result.type).to be(:api_token_updated)
-          expect(result.data.keys).to contain_exactly(:api_token_updated)
+          expect(result.type).to be(:user_found)
+          expect(result.data.keys).to contain_exactly(:user)
         end
 
-        it 'exposes instructions_delivered' do
+        it 'exposes user_found' do
           result = described_class.call(token:)
 
-          expect(result[:api_token_updated]).to be(true)
-        end
-
-        it 'changes the user api_token' do
-          expect {
-            described_class.call(token:)
-          }.to change { user.reload.api_token }
-
-          expect(user.api_token.size).to be == 36
+          expect(result[:user]).to be == user
         end
       end
     end

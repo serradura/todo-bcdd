@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::GenerateNewAPIToken < ::Micro::Case
+class User::APIToken::Generate < ::Micro::Case
   attribute :token, validates: {presence: true, length: {is: 36}}
 
   def call!
