@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::CreateAndSendWelcomeEmail < ::Micro::Case
+class User::RegisterAndSendWelcomeEmail < ::Micro::Case
   TrimmedString = ->(value) { String(value).strip }
 
   attribute :email, default: TrimmedString >> lambda(&:downcase)

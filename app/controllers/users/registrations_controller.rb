@@ -15,7 +15,7 @@ module Users
         password_confirmation: user_params[:password_confirmation]
       }
 
-      ::User::CreateAndSendWelcomeEmail
+      ::User::RegisterAndSendWelcomeEmail
         .call(input)
         .on_failure(:validation_errors) { |result| render_sign_up_with_form_errors(result) }
         .on_success do |result|
