@@ -30,11 +30,9 @@ module User
       end
 
       def create_user(**)
-        user = Record.new(
-          email: email.value,
-          api_token: APIToken::Value.generate,
-          encrypted_password: password.encrypted
-        )
+        api_token = APIToken::Value.new
+
+        user = Record.new(email: email.value, api_token: api_token.value, encrypted_password: password.encrypted)
 
         return Success(:user_created, result: {user:}) if user.save
 

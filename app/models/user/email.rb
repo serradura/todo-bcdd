@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class User::Email
-  attr_reader :value, :validation_error
+require 'kind_value'
 
-  def initialize(object)
-    @value = object.is_a?(self.class) ? object.value : String(object).strip.downcase
-  end
+class User::Email < Kind::Value
+  def self.call_to_normalize_the_value(input) = String(input).strip.downcase
+
+  attr_reader :validation_error
 
   FORMAT = ::URI::MailTo::EMAIL_REGEXP
 
@@ -14,7 +14,5 @@ class User::Email
     @validation_error.present?
   end
 
-  def valid?
-    !invalid?
-  end
+  def valid? = !invalid?
 end

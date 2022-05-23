@@ -7,7 +7,7 @@ module User::ResetPassword
     def call!
       return Failure(:invalid_email) if email.invalid?
 
-      reset_password_token = Token.generate.value
+      reset_password_token = Token.new.value
 
       updated = ::User::Record.where(email: email.value).update_all(reset_password_token:)
 

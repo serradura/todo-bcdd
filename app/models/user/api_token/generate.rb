@@ -5,7 +5,9 @@ module User::APIToken
     attribute :token, validates: {presence: true, length: {is: Value::LENGTH}}
 
     def call!
-      updated = ::User::Record.where(api_token: token).update_all(api_token: Value.generate)
+      api_token = Value.new
+
+      updated = ::User::Record.where(api_token: token).update_all(api_token: api_token.value)
 
       return Failure(:user_not_found) if updated.zero?
 

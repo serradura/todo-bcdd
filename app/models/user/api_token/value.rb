@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
-module User::APIToken
-  module Value
-    LENGTH = 36
+require 'kind_value'
 
-    def self.generate
-      ::SecureRandom.base58(LENGTH)
-    end
-  end
+class User::APIToken::Value < Kind::Value
+  LENGTH = 36
+
+  def self.call_to_generate_a_default_value = ::SecureRandom.base58(LENGTH)
 end

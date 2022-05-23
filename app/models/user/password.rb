@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-class User::Password
-  def self.value(object)
-    object.is_a?(self) ? object.value : String(object).strip
-  end
+require 'kind_value'
 
-  def self.match?(encrypted, password)
-    ::BCrypt::Password.new(encrypted) == value(password)
-  end
+class User::Password < Kind::Value
+  def self.call_to_normalize_the_value(input) = String(input).strip
+
+  def self.match?(encrypted, password) = ::BCrypt::Password.new(encrypted) == value(password)
 
   def self.validate(password:, confirmation:)
     errors = {}
@@ -17,15 +15,7 @@ class User::Password
     errors
   end
 
-  attr_reader :value, :validation_error
-
-  def initialize(object)
-    @value = self.class.value(object)
-  end
-
-  def present?
-    value.present?
-  end
+  attr_reader :validation_error
 
   MINIMUM = 6
 
@@ -35,11 +25,7 @@ class User::Password
     @validation_error.present?
   end
 
-  def ==(other)
-    other.is_a?(self.class) && value == other.value
-  end
+  def encrypted = @encrypted ||= ::BCrypt::Password.create(value)
 
-  def encrypted
-    @encrypted ||= ::BCrypt::Password.create(value)
-  end
+  def present? = value.present?
 end
