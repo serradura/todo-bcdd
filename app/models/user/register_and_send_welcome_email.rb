@@ -20,7 +20,7 @@ module User
       end
 
       def validate_email_and_passwords
-        errors = ::User::Password.validate(password:, confirmation: password_confirmation)
+        errors = ::User::Password::ValidateWithConfirmation.call(password, password_confirmation)
 
         errors[:email] = email.validation_error if email.invalid?
 

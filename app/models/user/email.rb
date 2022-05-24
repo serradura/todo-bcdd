@@ -3,16 +3,15 @@
 require 'kind_value'
 
 class User::Email < Kind::Value
-  def self.call_to_normalize_the_value(input) = String(input).strip.downcase
+  include Kind::Value::Validation
 
-  attr_reader :validation_error
+  def self.call_to_normalize_the_value(input)
+    String(input).strip.downcase
+  end
 
   FORMAT = ::URI::MailTo::EMAIL_REGEXP
 
-  def invalid?
-    @validation_error = 'is invalid' unless value.present? && value.match?(FORMAT)
-    @validation_error.present?
+  def self.call_to_validate_the_value(value)
+    'is invalid' unless value.present? && value.match?(FORMAT)
   end
-
-  def valid? = !invalid?
 end

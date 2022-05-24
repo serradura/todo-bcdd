@@ -9,7 +9,7 @@ module User::ResetPassword
     def call!
       return Failure(:invalid_token) unless token.valid?
 
-      errors = ::User::Password.validate(password:, confirmation: password_confirmation)
+      errors = ::User::Password::ValidateWithConfirmation.call(password, password_confirmation)
 
       return Failure(:invalid_password, result: {errors:}) if errors.present?
 
