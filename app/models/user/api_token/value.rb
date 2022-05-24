@@ -3,9 +3,11 @@
 require 'kind_value'
 
 class User::APIToken::Value < Kind::Value
-  LENGTH = 36
+  value_object do |strategy_to|
+    LENGTH = 36
 
-  def self.call_to_generate_a_default_value
-    ::SecureRandom.base58(LENGTH)
+    def strategy_to.generate_default_value
+      ::SecureRandom.base58(LENGTH)
+    end
   end
 end

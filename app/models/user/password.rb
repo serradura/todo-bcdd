@@ -3,21 +3,23 @@
 require 'kind_value'
 
 class User::Password < Kind::Value
-  include Kind::Value::Validation
+  value_object(with: :validation) do |strategy_to|
+    def strategy_to.normalize(input) = String(input).strip
 
-  def self.call_to_normalize_the_value(input)
-    String(input).strip
+    MINIMUM = 6
+
+    def strategy_to.validate(value)
+      return "can't be blank" if value.blank?
+
+      "is too short (minimum: #{MINIMUM})" if value.size < MINIMUM
+    end
   end
 
-  MINIMUM = 6
-
-  def self.call_to_validate_the_value(value)
-    return "can't be blank" if value.blank?
-
-    "is too short (minimum: #{MINIMUM})" if value.size < MINIMUM
+  def self.match?(encrypted, password)
+    ::BCrypt::Password.new(encrypted) == value(password)
   end
 
-  def self.match?(encrypted, password) = ::BCrypt::Password.new(encrypted) == value(password)
-
-  def encrypted = @encrypted ||= ::BCrypt::Password.create(value)
+  def encrypted
+    @encrypted ||= ::BCrypt::Password.create(value)
+  end
 end

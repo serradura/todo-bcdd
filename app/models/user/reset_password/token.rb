@@ -3,15 +3,15 @@
 require 'kind_value'
 
 class User::ResetPassword::Token < Kind::Value
-  include Kind::Value::Validation
+  value_object(with: :validation) do |strategy_to|
+    def strategy_to.generate_default_value = ::SecureRandom.uuid
 
-  def self.call_to_generate_a_default_value = ::SecureRandom.uuid
+    def strategy_to.normalize(input) = String(input).strip
 
-  def self.call_to_normalize_the_value(input) = String(input).strip
+    FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
 
-  FORMAT = /\A[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\z/
-
-  def self.call_to_validate_the_value(value)
-    'must be an UUID' unless value.match?(FORMAT)
+    def strategy_to.validate(value)
+      'must be an UUID' unless value.match?(FORMAT)
+    end
   end
 end
