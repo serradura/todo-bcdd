@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module User::ResetPassword
+class User::Password::Reset
   class ValidateToken < ::Micro::Case
     attribute :token, default: ->(value) { String(value).strip }
 

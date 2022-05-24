@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::ResetPassword::SendInstructions, type: :use_case do
+RSpec.describe User::Password::Reset::SendInstructions, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the email is blank' do

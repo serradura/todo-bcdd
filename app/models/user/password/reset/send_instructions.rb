@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module User::ResetPassword
+class User::Password::Reset
   class SendInstructions < ::Micro::Case
     attribute :email, default: ->(value) { ::User::Email.new(value) }
 

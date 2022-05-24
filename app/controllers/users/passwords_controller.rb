@@ -9,7 +9,7 @@ module Users
     def create
       email = params.require(:user).fetch(:email)
 
-      ::User::ResetPassword::SendInstructions.call(email:)
+      ::User::Password::Reset::SendInstructions.call(email:)
 
       notice = 'You will receive an email with instructions for how to confirm your email address in a few minutes.'
 
@@ -19,7 +19,7 @@ module Users
     def edit
       reset_password_token = params[:uuid]
 
-      ::User::ResetPassword::ValidateToken
+      ::User::Password::Reset::ValidateToken
         .call(token: reset_password_token)
         .on_success { render_edit(reset_password_token:, errors: nil) }
         .on_failure do
@@ -42,7 +42,7 @@ module Users
         password_confirmation: user_params[:password_confirmation]
       }
 
-      ::User::ResetPassword::Process
+      ::User::Password::Reset
         .call(input)
         .on_failure(:invalid_token) { forbid_access_and_redirect }
         .on_failure(:user_not_found) { forbid_access_and_redirect }
