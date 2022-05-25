@@ -7,9 +7,6 @@ module Todo
 
       belongs_to :user, class_name: '::User::Record'
 
-      scope :completed, -> { where.not(completed_at: nil) }
-      scope :uncompleted, -> { where(completed_at: nil) }
-
       validates :description, presence: true
 
       def status = completed? ? Status::COMPLETED : Status::UNCOMPLETED

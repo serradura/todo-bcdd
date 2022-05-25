@@ -4,11 +4,15 @@ module Todo::Item
   class Delete < ::Micro::Case
     attribute :id, validates: {numericality: {only_integer: true}}
     attribute :user_id, validates: {numericality: {only_integer: true}}
+    attribute :repository, {
+      default: Repository,
+      validates: {kind: {respond_to: :delete_item}}
+    }
 
     def call!
-      deleted = Record.where(user_id:, id:).delete_all
+      deleted = repository.delete_item(user_id:, id:)
 
-      return Failure(:todo_not_found) if deleted.zero?
+      return Failure(:todo_not_found) unless deleted
 
       Success(:todo_deleted)
     end

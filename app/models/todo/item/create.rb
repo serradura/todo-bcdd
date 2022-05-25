@@ -4,9 +4,13 @@ module Todo::Item
   class Create < ::Micro::Case
     attribute :user_id, validates: {numericality: {only_integer: true}}
     attribute :description, validates: {presence: true}
+    attribute :repository, {
+      default: Repository,
+      validates: {kind: {respond_to: :add_item}}
+    }
 
     def call!
-      todo = Record.create(user_id:, description:)
+      todo = repository.add_item(user_id:, description:)
 
       return Failure(:user_not_found) if todo.errors.of_kind?(:user, :blank)
 
