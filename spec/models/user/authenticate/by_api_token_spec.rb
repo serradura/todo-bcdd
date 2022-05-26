@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe User::APIToken::Authenticate, type: :use_case do
+RSpec.describe User::Authenticate::ByAPIToken, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the token is blank' do

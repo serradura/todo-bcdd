@@ -39,7 +39,7 @@ end
   def authenticate!
     email_and_password = scoped_params.slice('email', 'password')
 
-    ::User::Authentication::Process.call(email_and_password) do |on|
+    ::User::Authenticate::ByEmailAndPassword.call(email_and_password) do |on|
       on.failure { fail!('Incorrect email or password.') }
       on.success { |result| success!(result[:user]) }
     end
@@ -55,7 +55,7 @@ end
 ::Warden::Manager.serialize_into_session(:user, &:id)
 
 ::Warden::Manager.serialize_from_session(:user) do |id|
-  ::User::Authentication::GetById.call(id:) do |on|
+  ::User::Authenticate::ById.call(id:) do |on|
     on.failure { raise NotImplementedError }
     on.success { |result| result[:user] }
   end
@@ -67,7 +67,7 @@ end
   end
 
   def authenticate!
-    ::User::APIToken::Authenticate.call(token: access_token) do |on|
+    ::User::Authenticate::ByAPIToken.call(token: access_token) do |on|
       on.success { |result| success!(result[:user]) }
       on.failure { fail!('Invalid access_token') }
     end
