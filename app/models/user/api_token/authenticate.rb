@@ -2,7 +2,7 @@
 
 module User::APIToken
   class Authenticate < ::Micro::Case
-    attribute :token, default: ->(value) { Value.new(value) }
+    attribute :token, default: proc(&Value)
     attribute :repository, {
       default: ::User::Repository,
       validates: {kind: {respond_to: :find_user_by_api_token}}

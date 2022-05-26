@@ -2,7 +2,7 @@
 
 class User::Password::Reset
   class ValidateToken < ::Micro::Case
-    attribute :token, default: ->(value) { Token.new(value) }
+    attribute :token, default: proc(&Token)
     attribute :repository, {
       default: ::User::Repository,
       validates: {kind: {respond_to: :valid_reset_password_token?}}

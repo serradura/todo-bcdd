@@ -73,7 +73,7 @@ module Kind
     end
 
     def self.to_proc
-      ->(value = nil) { new(value) }
+      @to_proc ||= ->(value = ::Kind::Undefined) { new(value) }
     end
 
     attr_reader :value

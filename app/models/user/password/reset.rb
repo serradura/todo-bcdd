@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class User::Password::Reset < ::Micro::Case
-  attribute :token, default: ->(value) { Token.new(value) }
-  attribute :password, default: ->(value) { ::User::Password.new(value) }
-  attribute :password_confirmation, default: ->(value) { ::User::Password.new(value) }
+  attribute :token, default: proc(&Token)
+  attribute :password, default: proc(&::User::Password)
+  attribute :password_confirmation, default: proc(&::User::Password)
   attribute :repository, {
     default: ::User::Repository,
     validates: {kind: {respond_to: :find_user_by_api_token}}

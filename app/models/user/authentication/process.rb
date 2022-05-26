@@ -2,8 +2,8 @@
 
 module User
   class Authentication::Process < ::Micro::Case
-    attribute :email, default: ->(value) { ::User::Email.new(value) }
-    attribute :password, default: ->(value) { ::User::Password.new(value) }
+    attribute :email, default: proc(&::User::Email)
+    attribute :password, default: proc(&::User::Password)
     attribute :repository, {
       default: ::User::Repository,
       validates: {kind: {respond_to: :find_user_by_email}}

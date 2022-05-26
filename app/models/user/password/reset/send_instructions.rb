@@ -2,7 +2,7 @@
 
 class User::Password::Reset
   class SendInstructions < ::Micro::Case
-    attribute :email, default: ->(value) { ::User::Email.new(value) }
+    attribute :email, default: proc(&::User::Email)
     attribute :repository, {
       default: ::User::Repository,
       validates: {kind: {respond_to: :update_reset_password_token}}

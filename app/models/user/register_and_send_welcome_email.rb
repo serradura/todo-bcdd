@@ -2,9 +2,9 @@
 
 module User
   class RegisterAndSendWelcomeEmail < ::Micro::Case
-    attribute :email, default: ->(value) { ::User::Email.new(value) }
-    attribute :password, default: ->(value) { ::User::Password.new(value) }
-    attribute :password_confirmation, default: ->(value) { ::User::Password.new(value) }
+    attribute :email, default: proc(&::User::Email)
+    attribute :password, default: proc(&::User::Password)
+    attribute :password_confirmation, default: proc(&::User::Password)
     attribute :repository, {
       default: Repository,
       validates: {kind: {respond_to: :create_user}}
