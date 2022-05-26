@@ -2,12 +2,16 @@
 
 module User::APIToken
   class Authenticate < ::Micro::Case
-    attribute :token, validates: {presence: true, length: {is: Value::LENGTH}}
+    attribute :token, default: ->(value) { Value.new(value) }
+    attribute :repository, {
+      default: ::User::Repository,
+      validates: {kind: {respond_to: :find_user_by_api_token}}
+    }
 
     def call!
-      user = ::User::Record.find_by(api_token: token)
+      user = repository.find_user_by_api_token(token)
 
-      return Failure(:user_not_found) unless user
+      return Failure(:invalid_token) unless user
 
       Success :user_found, result: {user:}
     end

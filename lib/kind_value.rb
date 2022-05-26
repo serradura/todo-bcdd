@@ -1,10 +1,20 @@
 # frozen_string_literal: true
 
+require 'kind'
+
 module Kind
   class Value
     require_relative 'kind_value/validation'
 
     module Strategy
+      def generate_default_for_nil_inputs=(bool)
+        @generate_default_for_nil_inputs = bool
+      end
+
+      def generate_default_for_nil_inputs
+        @generate_default_for_nil_inputs
+      end
+
       def generate_default_value
         nil
       end
@@ -23,6 +33,7 @@ module Kind
     def self.value_object(with: nil)
       mod = ::Module.new
       mod.extend(::Kind::Value::Strategy)
+      mod.generate_default_for_nil_inputs = true
       mod.instance_variable_set(:@value_class, self)
 
       if with == :validation
@@ -46,14 +57,23 @@ module Kind
       input.is_a?(self) ? input.value : strategy_to.normalize(input)
     end
 
-    def self.new(input = nil)
+    def self.new(input = ::Kind::Undefined)
       return input if input.is_a?(self.class)
 
-      value = input.nil? ? strategy_to.generate_default_value : input
+      value =
+        if ::Kind::Undefined == input || (input.nil? && strategy_to.generate_default_for_nil_inputs)
+          strategy_to.generate_default_value
+        else
+          input
+        end
 
       instance = allocate
       instance.send(:initialize, value)
       instance
+    end
+
+    def self.to_proc
+      ->(value = nil) { new(value) }
     end
 
     attr_reader :value

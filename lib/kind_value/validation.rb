@@ -30,10 +30,18 @@ class Kind::Value
       !validation_error.nil?
     end
 
-    def invalid?
+    def invalid!
       @validation_error = self.class.strategy_to.validate!(value)
 
-      validation_error?
+      @invalid = validation_error?
+    end
+
+    def invalid?
+      defined?(@invalid) ? @invalid : invalid!
+    end
+
+    def valid!
+      !invalid!
     end
 
     def valid?

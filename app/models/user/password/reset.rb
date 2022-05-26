@@ -4,6 +4,10 @@ class User::Password::Reset < ::Micro::Case
   attribute :token, default: ->(value) { Token.new(value) }
   attribute :password, default: ->(value) { ::User::Password.new(value) }
   attribute :password_confirmation, default: ->(value) { ::User::Password.new(value) }
+  attribute :repository, {
+    default: ::User::Repository,
+    validates: {kind: {respond_to: :find_user_by_api_token}}
+  }
 
   def call!
     return Failure(:invalid_token) unless token.valid?
@@ -12,7 +16,7 @@ class User::Password::Reset < ::Micro::Case
 
     return Failure(:invalid_password, result: {errors:}) if errors.present?
 
-    user = ::User::Record.find_by(reset_password_token: token.value)
+    user = repository.find_user_by_reset_password_token(token)
 
     return Failure(:user_not_found) unless user
 

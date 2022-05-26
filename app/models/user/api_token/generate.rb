@@ -2,16 +2,18 @@
 
 module User::APIToken
   class Generate < ::Micro::Case
-    attribute :token, validates: {presence: true, length: {is: Value::LENGTH}}
+    attribute :token, default: ->(value) { Value.new(value) }
+    attribute :repository, {
+      default: ::User::Repository,
+      validates: {kind: {respond_to: :update_api_token}}
+    }
 
     def call!
-      api_token = Value.new
+      return Failure(:invalid_token) if token.invalid?
 
-      updated = ::User::Record.where(api_token: token).update_all(api_token: api_token.value)
+      updated = repository.update_api_token(old_token: token, new_token: Value.new)
 
-      return Failure(:user_not_found) if updated.zero?
-
-      Success(:api_token_updated)
+      updated ? Success(:api_token_updated) : Failure(:user_not_found)
     end
   end
 end

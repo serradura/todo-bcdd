@@ -12,14 +12,14 @@ RSpec.describe User::APIToken::Generate, type: :use_case do
           result = described_class.call(token:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_token)
+          expect(result.data.keys).to contain_exactly(:invalid_token)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_token' do
           result = described_class.call(token:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:token)
+          expect(result[:invalid_token]).to be(true)
         end
       end
 
@@ -30,14 +30,14 @@ RSpec.describe User::APIToken::Generate, type: :use_case do
           result = described_class.call(token:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_token)
+          expect(result.data.keys).to contain_exactly(:invalid_token)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_token' do
           result = described_class.call(token:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:token)
+          expect(result[:invalid_token]).to be(true)
         end
       end
 

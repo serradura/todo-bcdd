@@ -23,21 +23,21 @@ RSpec.describe User::Password::Reset::ValidateToken, type: :use_case do
         end
       end
 
-      context 'when the user is not found' do
+      context 'when the token is not found' do
         let(:token) { ::SecureRandom.uuid }
 
         it 'returns a failure' do
           result = described_class.call(token:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:user_not_found)
-          expect(result.data.keys).to contain_exactly(:user_not_found)
+          expect(result.type).to be(:invalid_token)
+          expect(result.data.keys).to contain_exactly(:invalid_token)
         end
 
-        it 'exposes user_not_found' do
+        it 'exposes invalid_token' do
           result = described_class.call(token:)
 
-          expect(result[:user_not_found]).to be(true)
+          expect(result[:invalid_token]).to be(true)
         end
       end
     end

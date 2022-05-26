@@ -3,9 +3,13 @@
 module User
   class Authentication::GetById < ::Micro::Case
     attribute :id, validates: {numericality: {only_integer: true}}
+    attribute :repository, {
+      default: ::User::Repository,
+      validates: {kind: {respond_to: :find_user_by_id}}
+    }
 
     def call!
-      user = Record.find_by(id:)
+      user = repository.find_user_by_id(id)
 
       return Failure(:user_not_found) unless user
 
