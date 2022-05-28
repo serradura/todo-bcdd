@@ -9,7 +9,7 @@ module Todos
     def create
       description = params.require(:todo)[:description]
 
-      ::Todo::Item::Create
+      ::Todo::Item::Add
         .call(description:, user_id: current_user.id)
         .on_success { redirect_after_creating }
         .on_failure(:user_not_found) { raise NotImplementedError }

@@ -10,18 +10,31 @@ class User::Password::Reset < ::Micro::Case
   }
 
   def call!
-    return Failure(:invalid_token) unless token.valid?
-
-    errors = ::User::Password::ValidateWithConfirmation.call(password, password_confirmation)
-
-    return Failure(:invalid_password, result: {errors:}) if errors.present?
-
-    user = repository.find_user_by_reset_password_token(token)
-
-    return Failure(:user_not_found) unless user
-
-    user.update!(reset_password_token: nil, encrypted_password: password.encrypted)
-
-    Success :user_password_changed, result: {user:}
+    validate_token
+      .then(:validate_password_with_confirmation)
+      .then(:find_user_by_reset_password_token)
+      .then(:update_user_password)
   end
+
+  private
+
+    def validate_token = token.valid? ? Success(:valid_token) : Failure(:invalid_token)
+
+    def validate_password_with_confirmation
+      errors = ::User::Password::ValidateWithConfirmation.call(password, password_confirmation)
+
+      errors.empty? ? Success(:valid_password) : Failure(:invalid_password, result: {errors:})
+    end
+
+    def find_user_by_reset_password_token
+      user = repository.find_user_by_reset_password_token(token)
+
+      user ? Success(result: {user:}) : Failure(:user_not_found)
+    end
+
+    def update_user_password(user:, **)
+      user.update!(reset_password_token: nil, encrypted_password: password.encrypted)
+
+      Success :user_password_changed, result: {user:}
+    end
 end

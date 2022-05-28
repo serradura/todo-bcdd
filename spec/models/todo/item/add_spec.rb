@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Todo::Item::Create, type: :use_case do
+RSpec.describe Todo::Item::Add, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the description is blank' do
@@ -110,7 +110,7 @@ RSpec.describe Todo::Item::Create, type: :use_case do
           result = described_class.call(user_id: user.id, description:)
 
           expect(result).to be_a_success
-          expect(result.type).to be(:todo_created)
+          expect(result.type).to be(:todo_added)
           expect(result.data.keys).to contain_exactly(:todo)
         end
 

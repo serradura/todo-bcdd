@@ -21,7 +21,7 @@ module API::V1::Todos
     def create
       description = params.require(:todo)[:description]
 
-      ::Todo::Item::Create
+      ::Todo::Item::Add
         .call(description:, user_id: current_user.id)
         .on_success { |result| render_todo(result) }
         .on_failure(:user_not_found) { raise NotImplementedError }

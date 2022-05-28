@@ -13,8 +13,14 @@ class User::Authenticate::ByEmailAndPassword < ::Micro::Case
 
     return Failure(:user_not_found) unless user
 
-    return Failure(:invalid_password) unless ::User::Password.match?(user.encrypted_password, password)
+    return Failure(:invalid_password) if invalid_password?(user)
 
-    Success :user_found, result: {user:}
+    Success(:user_found, result: {user:})
   end
+
+  private
+
+    def invalid_password?(user)
+      !::User::Password.match?(user.encrypted_password, password)
+    end
 end
