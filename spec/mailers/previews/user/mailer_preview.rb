@@ -9,7 +9,7 @@ class User::MailerPreview < ActionMailer::Preview
   end
 
   def reset_password
-    reset_password_token = ::User::Password::Reset::Token.new.value
+    reset_password_token = ::Kind::UUID.new.value
 
     ::User::Mailer.with(reset_password_token:, email: EMAIL).reset_password
   end

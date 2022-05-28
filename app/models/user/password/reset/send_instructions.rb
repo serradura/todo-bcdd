@@ -11,7 +11,7 @@ class User::Password::Reset
     def call!
       return Failure(:invalid_email) if email.invalid?
 
-      token = Token.new
+      token = ::Kind::UUID.new
 
       updated = repository.update_reset_password_token(email:, token:)
 

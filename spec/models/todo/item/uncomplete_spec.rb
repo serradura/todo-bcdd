@@ -10,17 +10,23 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
         let(:user_id) { [nil, '', ' '].sample }
 
         it 'returns a failure' do
-          result = described_class.call(id:, user_id:)
+          results = [
+            described_class.call(id:, user_id: 1),
+            described_class.call(id: 1, user_id:)
+          ]
 
-          expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(results).to all be_a_failure
+          expect(results.map(&:type)).to all be(:invalid_scope)
+          expect(results.map(&:data).map(&:keys)).to all contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
-          result = described_class.call(id:, user_id:)
+        it 'exposes the invalid_scope' do
+          results = [
+            described_class.call(id:, user_id: 1),
+            described_class.call(id: 1, user_id:)
+          ]
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id, :user_id)
+          expect(results.pluck(:invalid_scope)).to all be(true)
         end
       end
 
@@ -29,17 +35,23 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
         let(:user_id) { Faker::Alphanumeric.alpha(number: 1) }
 
         it 'returns a failure' do
-          result = described_class.call(id:, user_id:)
+          results = [
+            described_class.call(id:, user_id: 1),
+            described_class.call(id: 1, user_id:)
+          ]
 
-          expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(results).to all be_a_failure
+          expect(results.map(&:type)).to all be(:invalid_scope)
+          expect(results.map(&:data).map(&:keys)).to all contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
-          result = described_class.call(id:, user_id:)
+        it 'exposes the invalid_scope' do
+          results = [
+            described_class.call(id:, user_id: 1),
+            described_class.call(id: 1, user_id:)
+          ]
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id, :user_id)
+          expect(results.pluck(:invalid_scope)).to all be(true)
         end
       end
 
@@ -48,17 +60,23 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
         let(:user_id) { [1.0, '1.0'].sample }
 
         it 'returns a failure' do
-          result = described_class.call(id:, user_id:)
+          results = [
+            described_class.call(id:, user_id: 1),
+            described_class.call(id: 1, user_id:)
+          ]
 
-          expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(results).to all be_a_failure
+          expect(results.map(&:type)).to all be(:invalid_scope)
+          expect(results.map(&:data).map(&:keys)).to all contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
-          result = described_class.call(id:, user_id:)
+        it 'exposes the invalid_scope' do
+          results = [
+            described_class.call(id:, user_id: 1),
+            described_class.call(id: 1, user_id:)
+          ]
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id, :user_id)
+          expect(results.pluck(:invalid_scope)).to all be(true)
         end
       end
 

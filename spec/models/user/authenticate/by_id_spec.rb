@@ -12,14 +12,14 @@ RSpec.describe User::Authenticate::ById, type: :use_case do
           result = described_class.call(id:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_id)
+          expect(result.data.keys).to contain_exactly(:invalid_id)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_id' do
           result = described_class.call(id:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id)
+          expect(result[:invalid_id]).to be(true)
         end
       end
 
@@ -30,14 +30,14 @@ RSpec.describe User::Authenticate::ById, type: :use_case do
           result = described_class.call(id:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_id)
+          expect(result.data.keys).to contain_exactly(:invalid_id)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_id' do
           result = described_class.call(id:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id)
+          expect(result[:invalid_id]).to be(true)
         end
       end
 
@@ -48,14 +48,14 @@ RSpec.describe User::Authenticate::ById, type: :use_case do
           result = described_class.call(id:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_id)
+          expect(result.data.keys).to contain_exactly(:invalid_id)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_id' do
           result = described_class.call(id:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:id)
+          expect(result[:invalid_id]).to be(true)
         end
       end
 

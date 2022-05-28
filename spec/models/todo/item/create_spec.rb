@@ -13,14 +13,14 @@ RSpec.describe Todo::Item::Create, type: :use_case do
           result = described_class.call(user_id:, description:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_description)
+          expect(result.data.keys).to contain_exactly(:error)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the error' do
           result = described_class.call(user_id:, description:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:description)
+          expect(result[:error]).to be == "can't be blank"
         end
       end
 
@@ -32,14 +32,14 @@ RSpec.describe Todo::Item::Create, type: :use_case do
           result = described_class.call(user_id:, description:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_scope)
+          expect(result.data.keys).to contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_scope' do
           result = described_class.call(user_id:, description:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:user_id)
+          expect(result[:invalid_scope]).to be(true)
         end
       end
 
@@ -51,14 +51,14 @@ RSpec.describe Todo::Item::Create, type: :use_case do
           result = described_class.call(user_id:, description:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_scope)
+          expect(result.data.keys).to contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_scope' do
           result = described_class.call(user_id:, description:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:user_id)
+          expect(result[:invalid_scope]).to be(true)
         end
       end
 
@@ -70,14 +70,14 @@ RSpec.describe Todo::Item::Create, type: :use_case do
           result = described_class.call(user_id:, description:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_scope)
+          expect(result.data.keys).to contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_scope' do
           result = described_class.call(user_id:, description:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:user_id)
+          expect(result[:invalid_scope]).to be(true)
         end
       end
 

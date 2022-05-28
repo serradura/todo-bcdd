@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User::Password::Reset < ::Micro::Case
-  attribute :token, default: proc(&Token)
+  attribute :token, default: proc(&::Kind::UUID)
   attribute :password, default: proc(&::User::Password)
   attribute :password_confirmation, default: proc(&::User::Password)
   attribute :repository, {

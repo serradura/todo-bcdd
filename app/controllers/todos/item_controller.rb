@@ -13,10 +13,8 @@ module Todos
         .call(description:, user_id: current_user.id)
         .on_success { redirect_after_creating }
         .on_failure(:user_not_found) { raise NotImplementedError }
-        .on_failure(:invalid_attributes) do |result|
-          form_errors = result[:errors].messages.transform_values { |messages| messages.join(', ') }
-
-          render_new(form_errors:, description:)
+        .on_failure(:invalid_description) do |result|
+          render_new(description:, form_errors: {description: result[:error]})
         end
     end
 
@@ -35,7 +33,7 @@ module Todos
         .call(description:, id: params[:id], user_id: current_user.id)
         .on_success { redirect_after_updating }
         .on_failure(:todo_not_found) { handle_todo_not_found }
-        .on_failure(:invalid_attributes) { |result| handle_updating_errors(result[:errors], description:) }
+        .on_failure(:invalid_description) { |result| handle_updating_errors(result[:error], description:) }
         .on_unknown { raise NotImplementedError }
     end
 
@@ -77,12 +75,8 @@ module Todos
         redirect_back_or_to(todos_uncompleted_path, notice: 'To-do not found or unavailable.')
       end
 
-      def handle_updating_errors(errors, description:)
-        form_errors = errors.messages.transform_values { |messages| messages.join(', ') }
-
-        raise NotImplementedError unless form_errors.one? && form_errors.key?(:description)
-
-        render_edit(form_errors:, todo_id: params[:id], todo_description: description)
+      def handle_updating_errors(error, description:)
+        render_edit(todo_id: params[:id], todo_description: description, form_errors: {description: error})
       end
 
       def redirect_after_deleting

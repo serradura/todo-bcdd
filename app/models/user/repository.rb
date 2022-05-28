@@ -18,7 +18,7 @@ module User::Repository
   end
 
   def find_user_by_id(id)
-    ::User::Record.find_by(id:)
+    ::User::Record.find_by(id: id.value)
   end
 
   def find_user_by_email(email)

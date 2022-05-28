@@ -2,21 +2,25 @@
 
 module Todo::Item
   class Create < ::Micro::Case
-    attribute :user_id, validates: {numericality: {only_integer: true}}
-    attribute :description, validates: {presence: true}
+    attribute :user_id, default: proc(&::Kind::ID)
+    attribute :description, default: proc(&::Todo::Description)
     attribute :repository, {
       default: Repository,
       validates: {kind: {respond_to: :add_item}}
     }
 
     def call!
+      return Failure(:invalid_scope) if user_id.invalid?
+
+      return Failure(:invalid_description, result: {error: description.validation_error}) if description.invalid?
+
       todo = repository.add_item(user_id:, description:)
 
       return Failure(:user_not_found) if todo.errors.of_kind?(:user, :blank)
 
-      return Success(:todo_created, result: {todo:}) if todo.persisted?
+      raise NotImplementedError unless todo.persisted?
 
-      raise NotImplementedError
+      Success(:todo_created, result: {todo:})
     end
   end
 end
