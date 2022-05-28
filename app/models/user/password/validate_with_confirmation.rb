@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'kind_value'
-
 module User::Password::ValidateWithConfirmation
   def self.call(password, confirmation)
     errors = {}

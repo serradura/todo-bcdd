@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'kind_value'
-
 class User::Password < Kind::Value
   value_object(with: :validation) do |strategy_to|
     def strategy_to.normalize(input) = String(input).strip

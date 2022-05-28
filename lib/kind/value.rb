@@ -4,31 +4,8 @@ require 'kind'
 
 module Kind
   class Value
-    require_relative 'kind_value/validation'
-
-    module Strategy
-      def generate_default_for_nil_inputs=(bool)
-        @generate_default_for_nil_inputs = bool
-      end
-
-      def generate_default_for_nil_inputs
-        @generate_default_for_nil_inputs
-      end
-
-      def generate_default_value
-        nil
-      end
-
-      def normalize(input)
-        input
-      end
-
-      private
-
-        def value_class
-          @value_class
-        end
-    end
+    require_relative 'value/strategy'
+    require_relative 'value/validation'
 
     def self.value_object(with: nil)
       mod = ::Module.new
@@ -96,6 +73,10 @@ module Kind
 
     def present?
       !blank?
+    end
+
+    def nil?
+      value.nil?
     end
 
     private

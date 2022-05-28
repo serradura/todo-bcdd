@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'kind_value'
-
 class User::APIToken::Value < Kind::Value
   value_object(with: :validation) do |strategy_to|
     strategy_to.generate_default_for_nil_inputs = false
