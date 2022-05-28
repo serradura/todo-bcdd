@@ -7,39 +7,39 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
     describe 'failures' do
       context 'when the status is invalid' do
         let(:user_id) { [1, 2, 3].sample }
-        let(:status) { ['completed', 'uncompleted', :foo, :bar].sample }
+        let(:status) { ['foo', 'bar', :foo, :bar].sample }
 
         it 'returns a failure' do
           result = described_class.call(user_id:, status:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_status)
+          expect(result.data.keys).to contain_exactly(:error)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the error' do
           result = described_class.call(user_id:, status:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:status)
+          expect(result[:error]).to be == 'is invalid'
         end
       end
 
       context 'when the user_id is blank' do
         let(:user_id) { [nil, '', ' '].sample }
-        let(:status) { [:completed, :uncompleted].sample }
+        let(:status) { [:completed, :uncompleted, 'completed', 'uncompleted'].sample }
 
         it 'returns a failure' do
           result = described_class.call(user_id:, status:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_scope)
+          expect(result.data.keys).to contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_scope' do
           result = described_class.call(user_id:, status:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:user_id)
+          expect(result[:invalid_scope]).to be(true)
         end
       end
 
@@ -51,14 +51,14 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
           result = described_class.call(user_id:, status:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_scope)
+          expect(result.data.keys).to contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_scope' do
           result = described_class.call(user_id:, status:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:user_id)
+          expect(result[:invalid_scope]).to be(true)
         end
       end
 
@@ -70,14 +70,14 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
           result = described_class.call(user_id:, status:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_attributes)
-          expect(result.data.keys).to contain_exactly(:errors)
+          expect(result.type).to be(:invalid_scope)
+          expect(result.data.keys).to contain_exactly(:invalid_scope)
         end
 
-        it 'exposes the validation errors' do
+        it 'exposes the invalid_scope' do
           result = described_class.call(user_id:, status:)
 
-          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:user_id)
+          expect(result[:invalid_scope]).to be(true)
         end
       end
     end
