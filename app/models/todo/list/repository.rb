@@ -5,10 +5,16 @@ module Todo
     module Repository
       extend self
 
-      def filter_items(user_id:, status:)
+      def add_item(scope, description:)
+        user_id = scope.owner_id.value
+
+        Item::Record.create(user_id:, description: description.value)
+      end
+
+      def filter_items(scope, status:)
         relation = filter_by_status(Item::Record, status)
 
-        relation.where(user_id: user_id.value)
+        relation.where(user_id: scope.owner_id.value)
       end
 
       private

@@ -6,11 +6,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
   describe '.call' do
     describe 'failures' do
       context 'when the status is invalid' do
-        let(:user_id) { [1, 2, 3].sample }
+        let(:scope) { Todo::List::Scope.new(owner_id: rand(1..100)) }
         let(:status) { ['foo', 'bar', :foo, :bar].sample }
 
         it 'returns a failure' do
-          result = described_class.call(user_id:, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result).to be_a_failure
           expect(result.type).to be(:invalid_status)
@@ -18,37 +18,37 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'exposes the error' do
-          result = described_class.call(user_id:, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result[:error]).to be == 'is invalid'
         end
       end
 
-      context 'when the user_id is blank' do
-        let(:user_id) { [nil, '', ' '].sample }
+      context 'when the scope attribute has the wrong kind' do
+        let(:scope) { nil }
         let(:status) { [:completed, :uncompleted, 'completed', 'uncompleted'].sample }
 
         it 'returns a failure' do
-          result = described_class.call(user_id:, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_scope)
-          expect(result.data.keys).to contain_exactly(:invalid_scope)
+          expect(result.type).to be(:invalid_attributes)
+          expect(result.data.keys).to contain_exactly(:errors)
         end
 
-        it 'exposes the invalid_scope' do
-          result = described_class.call(user_id:, status:)
+        it 'exposes the validation errors' do
+          result = described_class.call(scope:, status:)
 
-          expect(result[:invalid_scope]).to be(true)
+          expect(result[:errors]).to be_a(::ActiveModel::Errors).and include(:scope)
         end
       end
 
-      context "when the user_id isn't numeric" do
-        let(:user_id) { Faker::Alphanumeric.alpha(number: 1) }
-        let(:status) { [:completed, :uncompleted].sample }
+      context 'when the scope is invalid' do
+        let(:scope) { ::Todo::List::Scope.new({}) }
+        let(:status) { [:completed, :uncompleted, 'completed', 'uncompleted'].sample }
 
         it 'returns a failure' do
-          result = described_class.call(user_id:, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result).to be_a_failure
           expect(result.type).to be(:invalid_scope)
@@ -56,26 +56,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'exposes the invalid_scope' do
-          result = described_class.call(user_id:, status:)
-
-          expect(result[:invalid_scope]).to be(true)
-        end
-      end
-
-      context "when the user_id isn't integer" do
-        let(:user_id) { [1.0, '1.0'].sample }
-        let(:status) { [:completed, :uncompleted].sample }
-
-        it 'returns a failure' do
-          result = described_class.call(user_id:, status:)
-
-          expect(result).to be_a_failure
-          expect(result.type).to be(:invalid_scope)
-          expect(result.data.keys).to contain_exactly(:invalid_scope)
-        end
-
-        it 'exposes the invalid_scope' do
-          result = described_class.call(user_id:, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result[:invalid_scope]).to be(true)
         end
@@ -84,11 +65,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
 
     describe 'success' do
       context 'when the user is not found' do
-        let(:user_id) { rand(100..200) }
+        let(:scope) { Todo::List::Scope.new(owner_id: rand(1..100)) }
         let(:status) { [:completed, :uncompleted].sample }
 
         it 'returns a successful result' do
-          result = described_class.call(user_id: user_id.to_s, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result).to be_a_success
           expect(result.type).to be(:todos_filtered)
@@ -96,7 +77,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'exposes todos' do
-          result = described_class.call(user_id: user_id.to_s, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result[:todos]).to have_attributes(
             itself: ActiveRecord::Relation,
@@ -107,9 +88,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
       end
 
       context 'when user is found and the status is completed' do
-        let(:status) { :completed }
         let!(:user) { create(:user) }
         let!(:completed_todo) { create(:todo_item, :completed, user: user) }
+
+        let(:status) { :completed }
+        let(:scope) { Todo::List::Scope.new(owner_id: user.id) }
 
         before do
           create(:todo_item, user: user)
@@ -117,7 +100,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'returns a successful result' do
-          result = described_class.call(user_id: user.id.to_s, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result).to be_a_success
           expect(result.type).to be(:todos_filtered)
@@ -125,7 +108,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'exposes todos' do
-          result = described_class.call(user_id: user.id.to_s, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result[:todos]).to have_attributes(
             itself: ActiveRecord::Relation,
@@ -138,9 +121,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
       end
 
       context 'when user is found and the status is uncompleted' do
-        let(:status) { :uncompleted }
         let!(:user) { create(:user) }
         let!(:uncompleted_todo) { create(:todo_item, user: user) }
+
+        let(:status) { :uncompleted }
+        let(:scope) { Todo::List::Scope.new(owner_id: user.id) }
 
         before do
           create(:todo_item, :completed, user: user)
@@ -148,7 +133,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'returns a successful result' do
-          result = described_class.call(user_id: user.id.to_s, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result).to be_a_success
           expect(result.type).to be(:todos_filtered)
@@ -156,7 +141,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         end
 
         it 'exposes todos' do
-          result = described_class.call(user_id: user.id.to_s, status:)
+          result = described_class.call(scope:, status:)
 
           expect(result[:todos]).to have_attributes(
             itself: ActiveRecord::Relation,

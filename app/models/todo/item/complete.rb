@@ -2,17 +2,16 @@
 
 module Todo::Item
   class Complete < ::Micro::Case
-    attribute :id, default: proc(&::Kind::ID)
-    attribute :user_id, default: proc(&::Kind::ID)
+    attribute :scope, validates: {kind: Scope}
     attribute :repository, {
       default: Repository,
       validates: {kind: {respond_to: :complete_item}}
     }
 
     def call!
-      return Failure(:invalid_scope) if id.invalid? || user_id.invalid?
+      return Failure(:invalid_scope) if scope.invalid?
 
-      completed = repository.complete_item(user_id:, id:)
+      completed = repository.complete_item(scope:)
 
       return Failure(:todo_not_found) unless completed
 

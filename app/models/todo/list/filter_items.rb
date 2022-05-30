@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-module Todo
-  module List
-    class FilterItems < ::Micro::Case
-      attribute :status, default: proc(&::Todo::Status)
-      attribute :user_id, default: proc(&::Kind::ID)
-      attribute :repository, {
-        default: Repository,
-        validates: {kind: {respond_to: :filter_items}}
-      }
+module Todo::List
+  class FilterItems < ::Micro::Case
+    attribute :scope, validates: {kind: Scope}
+    attribute :status, default: proc(&::Todo::Status)
+    attribute :repository, {
+      default: Repository,
+      validates: {kind: {respond_to: :filter_items}}
+    }
 
-      def call!
-        return invalid_status if status.invalid?
+    def call!
+      return Failure(:invalid_scope) if scope.invalid?
 
-        return Failure(:invalid_scope) if user_id.invalid?
+      return invalid_status if status.invalid?
 
-        todos = repository.filter_items(user_id:, status:)
+      todos = repository.filter_items(scope, status:)
 
-        Success :todos_filtered, result: {todos:}
-      end
-
-      private
-
-        def invalid_status = Failure(:invalid_status, result: {error: status.validation_error})
+      Success :todos_filtered, result: {todos:}
     end
+
+    private
+
+      def invalid_status
+        Failure(:invalid_status, result: {error: status.validation_error})
+      end
   end
 end

@@ -7,10 +7,12 @@ module Todos
     end
 
     def create
+      scope = Todo::List::Scope.new(owner_id: current_user.id)
+
       description = params.require(:todo)[:description]
 
-      ::Todo::Item::Add
-        .call(description:, user_id: current_user.id)
+      ::Todo::List::AddItem
+        .call(scope:, description:)
         .on_success { redirect_after_creating }
         .on_failure(:user_not_found) { raise NotImplementedError }
         .on_failure(:invalid_description) do |result|
@@ -19,18 +21,22 @@ module Todos
     end
 
     def edit
+      scope = build_scope(id: params[:id])
+
       ::Todo::Item::Find
-        .call(id: params[:id], user_id: current_user.id)
+        .call(scope:)
         .on_success { |result| render_edit_with_todo(result[:todo]) }
         .on_failure(:todo_not_found) { handle_todo_not_found }
         .on_unknown { raise NotImplementedError }
     end
 
     def update
+      scope = build_scope(id: params[:id])
+
       description = params.require(:todo)[:description]
 
       ::Todo::Item::UpdateDescription
-        .call(description:, id: params[:id], user_id: current_user.id)
+        .call(scope:, description:)
         .on_success { redirect_after_updating }
         .on_failure(:todo_not_found) { handle_todo_not_found }
         .on_failure(:invalid_description) { |result| handle_updating_errors(result[:error], description:) }
@@ -38,14 +44,20 @@ module Todos
     end
 
     def delete
+      scope = build_scope(id: params[:id])
+
       ::Todo::Item::Delete
-        .call(id: params[:id], user_id: current_user.id)
+        .call(scope:)
         .on_success { redirect_after_deleting }
         .on_failure(:todo_not_found) { handle_todo_not_found }
         .on_unknown { raise NotImplementedError }
     end
 
     private
+
+      def build_scope(id:)
+        ::Todo::Item::Scope.new(owner_id: current_user.id, id: id)
+      end
 
       def render_new(form_errors: {}, description: nil)
         render('todos/item/new', locals: {form_errors:, description:})

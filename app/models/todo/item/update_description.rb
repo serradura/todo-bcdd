@@ -2,8 +2,7 @@
 
 module Todo::Item
   class UpdateDescription < ::Micro::Case
-    attribute :id, default: proc(&::Kind::ID)
-    attribute :user_id, default: proc(&::Kind::ID)
+    attribute :scope, validates: {kind: Scope}
     attribute :description, default: proc(&::Todo::Description)
     attribute :repository, {
       default: Repository,
@@ -19,7 +18,7 @@ module Todo::Item
     private
 
       def validate_scope
-        id.valid? && user_id.valid? ? Success(:valid_scope) : Failure(:invalid_scope)
+        scope.valid? ? Success(:valid_scope) : Failure(:invalid_scope)
       end
 
       def validate_description
@@ -29,7 +28,7 @@ module Todo::Item
       end
 
       def update_todo_description
-        updated = repository.update_description(description, user_id:, id:)
+        updated = repository.update_description(description, scope:)
 
         updated ? Success(:todo_description_updated) : Failure(:todo_not_found)
       end

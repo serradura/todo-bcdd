@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Todo::Item
-  class Add < ::Micro::Case
-    attribute :user_id, default: proc(&::Kind::ID)
+module Todo::List
+  class AddItem < ::Micro::Case
+    attribute :scope, validates: {kind: Scope}
     attribute :description, default: proc(&::Todo::Description)
     attribute :repository, {
       default: Repository,
@@ -19,7 +19,7 @@ module Todo::Item
     private
 
       def validate_scope
-        user_id.valid? ? Success(:valid_scope) : Failure(:invalid_scope)
+        scope.valid? ? Success(:valid_scope) : Failure(:invalid_scope)
       end
 
       def validate_description
@@ -29,7 +29,7 @@ module Todo::Item
       end
 
       def add_todo_item
-        todo = repository.add_item(user_id:, description:)
+        todo = repository.add_item(scope, description:)
 
         return Failure(:user_not_found) if todo.errors.of_kind?(:user, :blank)
 

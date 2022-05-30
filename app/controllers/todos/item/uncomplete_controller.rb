@@ -3,8 +3,10 @@
 module Todos
   class Item::UncompleteController < BaseController
     def update
+      scope = ::Todo::Item::Scope.new(owner_id: current_user.id, id: params[:id])
+
       ::Todo::Item::Uncomplete
-        .call(id: params[:id], user_id: current_user.id)
+        .call(scope:)
         .on_success { redirect_after_updating }
         .on_failure(:todo_not_found) { handle_todo_not_found }
         .on_unknown { raise NotImplementedError }

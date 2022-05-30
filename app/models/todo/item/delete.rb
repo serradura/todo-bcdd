@@ -2,17 +2,16 @@
 
 module Todo::Item
   class Delete < ::Micro::Case
-    attribute :id, default: proc(&::Kind::ID)
-    attribute :user_id, default: proc(&::Kind::ID)
+    attribute :scope, validates: {kind: Scope}
     attribute :repository, {
       default: Repository,
       validates: {kind: {respond_to: :delete_item}}
     }
 
     def call!
-      return Failure(:invalid_scope) if id.invalid? || user_id.invalid?
+      return Failure(:invalid_scope) if scope.invalid?
 
-      deleted = repository.delete_item(user_id:, id:)
+      deleted = repository.delete_item(scope:)
 
       deleted ? Success(:todo_deleted) : Failure(:todo_not_found)
     end
