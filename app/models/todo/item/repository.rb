@@ -33,6 +33,8 @@ module Todo::Item
     private
 
       def update(scope, attributes)
+        attributes.merge!(updated_at: ::Time.current)
+
         updated = Record.where(Conditions[scope]).update_all(attributes)
 
         updated == 1

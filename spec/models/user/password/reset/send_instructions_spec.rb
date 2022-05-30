@@ -63,7 +63,8 @@ RSpec.describe User::Password::Reset::SendInstructions, type: :use_case do
       context 'when the user is found' do
         include ActiveJob::TestHelper
 
-        let!(:user) { create(:user) }
+        let!(:created_at) { 10.seconds.ago }
+        let!(:user) { create(:user, created_at:, updated_at: created_at) }
         let(:email) { [user.email, " #{user.email.capitalize}"].sample }
 
         it 'returns a succesful result' do
@@ -81,19 +82,24 @@ RSpec.describe User::Password::Reset::SendInstructions, type: :use_case do
         end
 
         it 'changes the user reset_password_token' do
-          expect {
-            described_class.call(email:)
-          }.to change { user.reload.reset_password_token }
+          expect { described_class.call(email:) }
+            .to change { user.reload.reset_password_token }
+        end
+
+        it 'changes the user updated_at' do
+          expect { described_class.call(email:) }
+            .to change { user.reload.updated_at }
+
+          expect(user.created_at).to be <= user.updated_at
         end
 
         it 'sends an email in background' do
-          expect {
-            described_class.call(email:)
-          }.to(
-            have_enqueued_job(ActionMailer::MailDeliveryJob)
-              .on_queue('default')
-              .with('User::Mailer', 'reset_password', any_args)
-          )
+          expect { described_class.call(email:) }
+            .to(
+              have_enqueued_job(ActionMailer::MailDeliveryJob)
+                .on_queue('default')
+                .with('User::Mailer', 'reset_password', any_args)
+            )
         end
       end
     end

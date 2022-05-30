@@ -86,8 +86,10 @@ RSpec.describe Todo::Item::UpdateDescription, type: :use_case do
 
     describe 'success' do
       context 'when a todo is found' do
+        let(:created_at) { 10.seconds.ago }
+
         let!(:user) { create(:user) }
-        let!(:todo) { create(:todo_item, user: user, created_at: 10.seconds.ago) }
+        let!(:todo) { create(:todo_item, user: user, created_at:, updated_at: created_at) }
         let(:scope) { Todo::Item::Scope.new(owner_id: user.id, id: todo.id) }
         let(:description) { Faker::Lorem.sentence(word_count: 3) }
 
@@ -110,6 +112,13 @@ RSpec.describe Todo::Item::UpdateDescription, type: :use_case do
             .to change { todo.reload.description }
 
           expect(todo.description).to be == description
+        end
+
+        it 'changes the todo updated_at' do
+          expect { described_class.call(scope:, description:) }
+            .to change { todo.reload.updated_at }
+
+          expect(todo.created_at).to be < todo.updated_at
         end
       end
     end

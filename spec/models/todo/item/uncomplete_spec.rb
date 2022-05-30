@@ -64,9 +64,11 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
 
     describe 'success' do
       context 'when a todo is found' do
+        let(:created_at) { 10.seconds.ago }
+
         let!(:user) { create(:user) }
         let!(:todo) do
-          create(:todo_item, user: user, created_at: 10.seconds.ago, completed_at: Time.current)
+          create(:todo_item, user:, created_at:, completed_at: Time.current, updated_at: created_at)
         end
         let!(:scope) { Todo::Item::Scope.new(owner_id: user.id, id: todo.id) }
 
@@ -88,6 +90,13 @@ RSpec.describe Todo::Item::Uncomplete, type: :use_case do
           expect { described_class.call(scope:) }
             .to change { todo.reload.completed_at }
             .from(be_a(ActiveSupport::TimeWithZone)).to(nil)
+        end
+
+        it 'changes the todo updated_at' do
+          expect { described_class.call(scope:) }
+            .to change { todo.reload.updated_at }
+
+          expect(todo.created_at).to be < todo.updated_at
         end
       end
     end

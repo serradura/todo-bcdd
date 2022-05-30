@@ -62,7 +62,8 @@ RSpec.describe User::APIToken::Generate, type: :use_case do
 
     describe 'success' do
       context 'when the user is found' do
-        let!(:user) { create(:user) }
+        let!(:created_at) { 10.seconds.ago }
+        let!(:user) { create(:user, created_at:, updated_at: created_at) }
         let!(:token) { user.api_token }
 
         it 'returns a succesful result' do
@@ -80,11 +81,17 @@ RSpec.describe User::APIToken::Generate, type: :use_case do
         end
 
         it 'changes the user api_token' do
-          expect {
-            described_class.call(token:)
-          }.to change { user.reload.api_token }
+          expect { described_class.call(token:) }
+            .to change { user.reload.api_token }
 
           expect(user.api_token.size).to be == 36
+        end
+
+        it 'changes the user updated_at' do
+          expect { described_class.call(token:) }
+            .to change { user.reload.updated_at }
+
+          expect(user.created_at).to be <= user.updated_at
         end
       end
     end

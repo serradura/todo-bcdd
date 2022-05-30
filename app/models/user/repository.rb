@@ -60,6 +60,8 @@ module User::Repository
   private
 
     def update(conditions:, attributes:)
+      attributes.merge!(updated_at: ::Time.current)
+
       updated = ::User::Record.where(conditions).update_all(attributes)
 
       updated == 1
