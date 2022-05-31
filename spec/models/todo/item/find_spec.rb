@@ -80,7 +80,8 @@ RSpec.describe Todo::Item::Find, type: :use_case do
         it 'exposes the todo' do
           result = described_class.call(scope:)
 
-          expect(result[:todo]).to be == todo
+          expect(result[:todo]).to match(Todo::Item)
+          expect(result[:todo].id).to be == todo.id
         end
       end
     end

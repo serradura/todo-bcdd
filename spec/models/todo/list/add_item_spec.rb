@@ -99,12 +99,14 @@ RSpec.describe Todo::List::AddItem, type: :use_case do
         it 'exposes todo' do
           result = described_class.call(scope:, description:)
 
-          expect(result[:todo]).to have_attributes(
-            itself: be_a(Todo::Item::Record),
-            user_id: user.id,
-            persisted?: true,
-            description: description
-          )
+          item = result[:todo]
+
+          expect(item).to match(Todo::Item)
+
+          todo = ::Todo::Item::Record.find(item.id)
+
+          expect(todo.id).to be == item.id
+          expect(todo.user_id).to be == scope.owner_id.value
         end
 
         it 'creates a todo' do

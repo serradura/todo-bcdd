@@ -31,11 +31,7 @@ module Todo::List
       def add_todo_item
         todo = repository.add_item(scope, description:)
 
-        return Failure(:user_not_found) if todo.errors.of_kind?(:user, :blank)
-
-        raise NotImplementedError unless todo.persisted?
-
-        Success(result: {todo:})
+        todo ? Success(result: {todo:}) : Failure(:user_not_found)
       end
   end
 end

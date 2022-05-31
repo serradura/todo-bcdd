@@ -79,11 +79,7 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         it 'exposes todos' do
           result = described_class.call(scope:, status:)
 
-          expect(result[:todos]).to have_attributes(
-            itself: ActiveRecord::Relation,
-            klass: Todo::Item::Record,
-            empty?: true
-          )
+          expect(result[:todos]).to have_attributes(itself: ::Array, empty?: true)
         end
       end
 
@@ -110,13 +106,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         it 'exposes todos' do
           result = described_class.call(scope:, status:)
 
-          expect(result[:todos]).to have_attributes(
-            itself: ActiveRecord::Relation,
-            klass: Todo::Item::Record,
-            size: 1
-          )
+          expect(result[:todos]).to have_attributes(itself: ::Array, size: 1)
 
-          expect(result[:todos]).to include(completed_todo)
+          expect(result[:todos].all?(Todo::Item)).to be(true)
+
+          expect(result[:todos]).to all have_attributes(id: completed_todo.id)
         end
       end
 
@@ -143,13 +137,11 @@ RSpec.describe Todo::List::FilterItems, type: :use_case do
         it 'exposes todos' do
           result = described_class.call(scope:, status:)
 
-          expect(result[:todos]).to have_attributes(
-            itself: ActiveRecord::Relation,
-            klass: Todo::Item::Record,
-            size: 1
-          )
+          expect(result[:todos]).to have_attributes(itself: ::Array, size: 1)
 
-          expect(result[:todos]).to include(uncompleted_todo)
+          expect(result[:todos].all?(Todo::Item)).to be(true)
+
+          expect(result[:todos]).to all have_attributes(id: uncompleted_todo.id)
         end
       end
     end

@@ -8,8 +8,15 @@ module Todo::Item
       {user_id: scope.owner_id.value, id: scope.id.value}
     end
 
+    BuildItem = ->((id, description, completed_at, created_at, updated_at)) do
+      ::Todo::Item.new(id:, description:, completed_at:, created_at:, updated_at:)
+    end
+
     def find_item(scope:)
-      Record.find_by(Conditions[scope])
+      Record
+        .where(Conditions[scope])
+        .pick(:id, :description, :completed_at, :created_at, :updated_at)
+        &.then(&BuildItem)
     end
 
     def update_description(description, scope:)

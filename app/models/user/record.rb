@@ -18,7 +18,7 @@ module User
 
     validates :api_token, {
       :presence => true,
-      :length   => {is: 36}
+      :length   => {is: APIToken::Value::LENGTH}
     }
   end
 end
