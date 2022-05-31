@@ -238,6 +238,7 @@ GEM
     u-case (4.5.1)
       kind (>= 5.6, < 6.0)
       u-attributes (>= 2.7, < 3.0)
+    u-struct (1.1.0)
     unicode-display_width (2.1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -277,6 +278,7 @@ DEPENDENCIES
   simplecov (~> 0.21.2)
   tzinfo-data
   u-case (~> 4.5, >= 4.5.1)
+  u-struct (~> 1.1)
   warden (~> 1.2, >= 1.2.9)
   web-console
 
