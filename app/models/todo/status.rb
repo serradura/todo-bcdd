@@ -6,11 +6,11 @@ module Todo
       COMPLETED   = :completed
       UNCOMPLETED = :uncompleted
 
-      ALL  = Set[COMPLETED, UNCOMPLETED].freeze
-      LIST = (ALL + ALL.map(&:to_s)).freeze
+      ALL   = Set[COMPLETED, UNCOMPLETED].freeze
+      NAMES = ALL.flat_map { [_1, _1.to_s] }.to_set.freeze
 
       def strategy_to.normalize(value)
-        value.to_sym if value.respond_to?(:to_sym) && LIST.include?(value)
+        value.to_sym if NAMES.include?(value)
       end
 
       def strategy_to.validate(value)
@@ -22,6 +22,6 @@ module Todo
 
     def uncompleted? = value == UNCOMPLETED
 
-    private_constant :LIST
+    private_constant :NAMES
   end
 end

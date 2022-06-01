@@ -10,7 +10,9 @@ class User::APIToken::Value < Kind::Value
       ::SecureRandom.base58(LENGTH)
     end
 
-    def strategy_to.normalize(input) = String(input).strip
+    def strategy_to.normalize(input)
+      String(input).strip
+    end
 
     def strategy_to.validate(input)
       return if input.size == LENGTH

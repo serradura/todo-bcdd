@@ -9,11 +9,11 @@ class Kind::ID < ::Kind::Value
     def strategy_to.normalize(input)
       return input if input.is_a?(::Integer)
 
-      return input.to_i if input.is_a?(String) && !input.empty? && input.match?(FORMAT)
+      return input.to_i if input.is_a?(::String) && input.match?(FORMAT)
     end
 
     def strategy_to.validate(value)
-      'must be a positive integer' unless value.is_a?(::Integer) && value.positive?
+      'must be a positive integer' unless value&.positive?
     end
   end
 end
