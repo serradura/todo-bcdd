@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User::Authenticate::ById < ::Micro::Case
+class User::FindById < ::Micro::Case
   attribute :id, default: proc(&::Kind::ID)
   attribute :repository, {
     default: ::User::Repository,

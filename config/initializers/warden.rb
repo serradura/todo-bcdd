@@ -55,7 +55,7 @@ end
 ::Warden::Manager.serialize_into_session(:user, &:id)
 
 ::Warden::Manager.serialize_from_session(:user) do |id|
-  ::User::Authenticate::ById.call(id:) do |on|
+  ::User::FindById.call(id:) do |on|
     on.failure { raise NotImplementedError }
     on.success { |result| result[:user] }
   end
