@@ -7,10 +7,8 @@ module Todo
 
       def add_item(scope, description:)
         created_at = ::Time.current
-        updated_at = created_at
-        completed_at = nil
 
-        data = {created_at:, updated_at:, completed_at:, description: description.value}
+        data = {created_at:, updated_at: created_at, completed_at: nil, description: description.value}
 
         result = Item::Record.insert(data.merge(user_id: scope.owner_id.value))
 

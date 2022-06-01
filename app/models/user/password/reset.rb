@@ -6,7 +6,7 @@ class User::Password::Reset < ::Micro::Case
   attribute :password_confirmation, default: proc(&::User::Password)
   attribute :repository, {
     default: ::User::Repository,
-    validates: {kind: {respond_to: :find_user_by_api_token}}
+    validates: {kind: {respond_to: [:find_user_by_reset_password_token, :change_user_password]}}
   }
 
   def call!
@@ -33,7 +33,9 @@ class User::Password::Reset < ::Micro::Case
     end
 
     def update_user_password(user:, **)
-      user.update!(reset_password_token: nil, encrypted_password: password.encrypted)
+      password_changed = repository.change_user_password(user, password)
+
+      raise NotImplementedError unless password_changed
 
       Success :user_password_changed, result: {user:}
     end

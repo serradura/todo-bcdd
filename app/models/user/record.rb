@@ -4,7 +4,12 @@ module User
   class Record < ApplicationRecord
     self.table_name = 'users'
 
-    has_many :todos, dependent: nil, class_name: '::Todo::Item::Record', foreign_key: 'user_id'
+    has_many :todos, **{
+      :dependent   => nil,
+      :inverse_of  => :user,
+      :class_name  => '::Todo::Item::Record',
+      :foreign_key => 'user_id'
+    }
 
     validates :email, {
       :presence   => true,
