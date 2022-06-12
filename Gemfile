@@ -39,6 +39,7 @@ gem 'warden', '~> 1.2', '>= 1.2.9'
 gem 'u-case', '~> 4.5', '>= 4.5.1'
 gem 'u-struct', '~> 1.1'
 
+gem 'redis', '~> 4.6'
 gem 'turbo-rails', '~> 1.1'
 
 group :development, :test do
