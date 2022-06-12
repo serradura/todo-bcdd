@@ -257,6 +257,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    wisper (2.0.1)
     zeitwerk (2.5.4)
 
 PLATFORMS
@@ -291,6 +292,7 @@ DEPENDENCIES
   u-struct (~> 1.1)
   warden (~> 1.2, >= 1.2.9)
   web-console
+  wisper (~> 2.0)
 
 RUBY VERSION
    ruby 3.1.2p20

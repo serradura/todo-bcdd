@@ -41,6 +41,7 @@ gem 'u-struct', '~> 1.1'
 
 gem 'redis', '~> 4.6'
 gem 'turbo-rails', '~> 1.1'
+gem 'wisper', '~> 2.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
