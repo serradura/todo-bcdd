@@ -80,12 +80,6 @@ module API::V1::Todos
         render_json(data: {todos: result[:todos].map(&:as_json)})
       end
 
-      def render_activemodel_errors(errors)
-        data = errors.messages.transform_values { |messages| messages.join(', ') }
-
-        render_json(data:, status: :unprocessable_entity)
-      end
-
       def render_invalid(attribute, result)
         render_json(status: :unprocessable_entity, data: {attribute => result[:error]})
       end
