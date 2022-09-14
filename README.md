@@ -2,6 +2,7 @@
 
 * System dependencies
   * Ruby `3.1.2`
+    * bundler `>= 2.3.13`
   * Node.js `>= 16.13.2`
     * npm `>= 8.0`
     * yarn `>= 1.22.0`
