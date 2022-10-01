@@ -88,6 +88,12 @@ Layout/ArrayAlignment:
 Layout/ExtraSpacing:
   Enabled: false
 
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
